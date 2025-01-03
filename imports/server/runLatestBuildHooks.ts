@@ -16,7 +16,7 @@ const previousLatest = await LatestDeploymentTimestamps.findOneAsync("default");
 if (previousLatest && previousLatest.buildTimestamp > buildTimestamp) {
   Logger.warn("Skipping startup hooks because we are not the latest", {
     previousTimestamp: previousLatest.buildTimestamp,
-    previousRevision: previousLatest.gitRevision,
+    previousRevision: previousLatest.gitRevision ?? "unknown-previous-build",
     buildTimestamp,
   });
 } else {
@@ -28,7 +28,7 @@ if (previousLatest && previousLatest.buildTimestamp > buildTimestamp) {
     await LatestDeploymentTimestamps.insertAsync({
       _id: "default",
       buildTimestamp,
-      gitRevision: Meteor.gitCommitHash,
+      gitRevision: Meteor.gitCommitHash ?? "unknown",
     });
   });
 
@@ -40,7 +40,7 @@ if (previousLatest && previousLatest.buildTimestamp > buildTimestamp) {
     {
       $set: {
         buildTimestamp,
-        gitRevision: Meteor.gitCommitHash,
+        gitRevision: Meteor.gitCommitHash ?? "unknown",
       },
     },
   );
