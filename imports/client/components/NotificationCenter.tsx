@@ -57,7 +57,9 @@ import Markdown from "./Markdown";
 import PuzzleAnswer from "./PuzzleAnswer";
 import SpinnerTimer from "./SpinnerTimer";
 import { GuessConfidence, GuessDirection } from "./guessDetails";
-import PuzzleNotifications, { PuzzleNotificationType } from "../../lib/models/PuzzleNotifications";
+import PuzzleNotifications, {
+  PuzzleNotificationType,
+} from "../../lib/models/PuzzleNotifications";
 import dismissPuzzleNotification from "../../methods/dismissPuzzleNotification";
 import puzzleNotificationsForSelf from "../../lib/publications/puzzleNotificationsForSelf";
 
@@ -423,7 +425,7 @@ const DiscordMessage = React.memo(
     }, [requestComplete]);
 
     const msg =
-      "It looks like you're not in our Discord server, which Jolly Roger manages access to.  Get added:";
+      "It looks like you haven't linked Discord. Please do so for full functionality.";
     const actions = [
       <StyledNotificationActionItem key="invite">
         <Button
@@ -436,7 +438,7 @@ const DiscordMessage = React.memo(
           }
           onClick={initiateOauthFlow}
         >
-          Add me
+          Link Discord
         </Button>
       </StyledNotificationActionItem>,
     ];
@@ -591,27 +593,27 @@ const PuzzleNotificationMessage = ({
   const id = pn._id;
   const dismiss = useCallback(
     () => dismissPuzzleNotification.call({ puzzleNotificationId: id }),
-    [id]
+    [id],
   );
 
   return (
     <Toast onClose={dismiss}>
       <Toast.Header>
         <strong className="me-auto">
-          <Link to={`/hunts/${hunt._id}/puzzles/${puzzle._id}`}>{puzzle.title}</Link>
+          <Link to={`/hunts/${hunt._id}/puzzles/${puzzle._id}`}>
+            {puzzle.title}
+          </Link>
         </strong>
-      <StyledNotificationTimestamp>
-        {calendarTimeFormat(pn.createdAt)}
-      </StyledNotificationTimestamp>
+        <StyledNotificationTimestamp>
+          {calendarTimeFormat(pn.createdAt)}
+        </StyledNotificationTimestamp>
       </Toast.Header>
       <Toast.Body>
-        <div>
-          {content}
-        </div>
+        <div>{content}</div>
       </Toast.Body>
     </Toast>
-  )
-}
+  );
+};
 
 const ChatNotificationMessage = ({
   cn,
