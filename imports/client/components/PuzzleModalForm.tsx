@@ -52,8 +52,12 @@ enum PuzzleModalFormSubmitState {
 
 export type PuzzleModalFormHandle = {
   show: () => void;
-  populateForm: (data: { title: string; url: string }) => void; // Add this line
-  submitForm: () => void; // Add this line
+  populateForm: (data: {
+    title: string;
+    url: string;
+    tagIds: string[] | null;
+  }) => void;
+  submitForm: () => void;
 };
 
 const PuzzleModalForm = React.forwardRef(
@@ -275,10 +279,16 @@ const PuzzleModalForm = React.forwardRef(
 
     useImperativeHandle(forwardedRef, () => ({
       show,
-      // Add this populateForm method:
-      populateForm: (data: { title: string; url: string }) => {
+      populateForm: (data: {
+        title: string;
+        url: string;
+        tagIds: string[];
+      }) => {
         setTitle(data.title);
         setUrl(data.url);
+        if (data.tagIds) {
+          setTags(tagNamesForIds([...new Set(data.tagIds)]));
+        }
       },
       submitForm: () => {
         if (formRef.current) {
