@@ -62,6 +62,7 @@ import useSubscribeDisplayNames from "../hooks/useSubscribeDisplayNames";
 import indexedDisplayNames from "../indexedDisplayNames";
 import pinnedMessagesForPuzzleList from "../../lib/publications/pinnedMessagesForPuzzleList";
 import ChatMessages, { ChatMessageType } from "../../lib/models/ChatMessages";
+import isAdmin from "../../lib/isAdmin";
 
 const FilteredChatFields = [
   "_id",
@@ -206,7 +207,7 @@ const PuzzleListView = ({
 
   const deletedPuzzles = useTracker(
     () =>
-      !canUpdate || loading
+      !isAdmin || loading
         ? undefined
         : Puzzles.findDeleted({ hunt: huntId }).fetch(),
     [canUpdate, huntId, loading],
@@ -819,7 +820,7 @@ const PuzzleListPage = () => {
 
   const puzzlesLoading = useTypedSubscribe(puzzlesForPuzzleList, {
     huntId,
-    includeDeleted: canUpdate,
+    includeDeleted: isAdmin,
   });
   const loading = puzzlesLoading();
 
