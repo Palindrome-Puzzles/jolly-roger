@@ -391,24 +391,29 @@ const PuzzleListView = ({
     }
   }, []);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const bookmarkTitle = searchParams.get("title") ?? ""
-  const bookmarkURL = searchParams.get("url") ?? ""
+  const bookmarkTitle = searchParams.get("title") ?? "";
+  const bookmarkURL = searchParams.get("url") ?? "";
 
   useEffect(() => {
     if (bookmarkURL) {
-      const existingPuzzle = Puzzles.findOne({url: {$regex: `^${bookmarkURL}`}})
+      const existingPuzzle = Puzzles.findOne({
+        url: { $regex: `^${bookmarkURL}` },
+      });
       if (existingPuzzle) {
         navigate(`./${existingPuzzle._id}`);
       } else if (addModalRef) {
         addModalRef.current?.show();
-        addModalRef.current?.populateForm({title:bookmarkTitle, url:bookmarkURL})
-        setSearchParams((prev:URLSearchParams) => {
-          prev.delete("url")
-          prev.delete("title")
-          return prev
-        })
+        addModalRef.current?.populateForm({
+          title: bookmarkTitle,
+          url: bookmarkURL,
+        });
+        setSearchParams((prev: URLSearchParams) => {
+          prev.delete("url");
+          prev.delete("title");
+          return prev;
+        });
       }
     }
   }, [bookmarkTitle, bookmarkURL]);
@@ -424,29 +429,29 @@ const PuzzleListView = ({
 
   const puzzleSubscribers = useTracker(() => {
     if (subscriptionsLoading) {
-      return {"none":{"none":[]}};
-      }
+      return { none: { none: [] } };
+    }
 
     let puzzleSubs = {};
 
-    Peers.find({}).fetch().forEach((s) => {
-      let puzzle = s.call;
-      let user = displayNames.get(s.createdBy);
-      if (!Object.prototype.hasOwnProperty.call(puzzleSubs, puzzle)) {
-        puzzleSubs[puzzle] = {
-          viewers: [],
-          callers: [],
-        };
-      }
-      if (
-        !puzzleSubs[puzzle].callers.includes(user)
-      ) {
-        puzzleSubs[puzzle].callers.push(user);
-      }
-    });
+    Peers.find({})
+      .fetch()
+      .forEach((s) => {
+        let puzzle = s.call;
+        let user = displayNames.get(s.createdBy);
+        if (!Object.prototype.hasOwnProperty.call(puzzleSubs, puzzle)) {
+          puzzleSubs[puzzle] = {
+            viewers: [],
+            callers: [],
+          };
+        }
+        if (!puzzleSubs[puzzle].callers.includes(user)) {
+          puzzleSubs[puzzle].callers.push(user);
+        }
+      });
 
     Subscribers.find({}).forEach((s) => {
-      let puzzle = s.name.replace(/^puzzle:/, '');
+      let puzzle = s.name.replace(/^puzzle:/, "");
       let user = displayNames.get(s.user);
       if (!Object.prototype.hasOwnProperty.call(puzzleSubs, puzzle)) {
         puzzleSubs[puzzle] = {
@@ -470,13 +475,15 @@ const PuzzleListView = ({
 
   const msgsLoading = subscribeMsgs();
 
-  const pinnedMessages = useTracker ( () => {
-    let pinMsgs: Record< string, ChatMessageType> = {};
-    ChatMessages.find({}, {sort:{ pinTs: -1 }}).fetch().forEach( (msg) => {
-      if (!Object.prototype.hasOwnProperty.call(pinMsgs, msg.puzzle)) {
-        pinMsgs[msg.puzzle] = msg;
-      }
-    });
+  const pinnedMessages = useTracker(() => {
+    let pinMsgs: Record<string, ChatMessageType> = {};
+    ChatMessages.find({}, { sort: { pinTs: -1 } })
+      .fetch()
+      .forEach((msg) => {
+        if (!Object.prototype.hasOwnProperty.call(pinMsgs, msg.puzzle)) {
+          pinMsgs[msg.puzzle] = msg;
+        }
+      });
     return pinMsgs;
   }, [msgsLoading]);
 
@@ -485,7 +492,7 @@ const PuzzleListView = ({
       retainedPuzzles: PuzzleType[],
       solvedOverConstrains: boolean,
       allPuzzlesCount: number,
-      puzzleSubscribers: Record <string, Record <string, string[]>>,
+      puzzleSubscribers: Record<string, Record<string, string[]>>,
     ) => {
       const maybeMatchWarning = solvedOverConstrains && (
         <Alert variant="info">
@@ -639,7 +646,7 @@ const PuzzleListView = ({
         onSubmit={onAdd}
       />
       <OperatorActionsFormGroup>
-        <FormLabel>Operator Interface</FormLabel>
+        <FormLabel>Answer Chief view</FormLabel>
         <ButtonToolbar>
           <StyledToggleButtonGroup
             type="radio"
@@ -788,7 +795,12 @@ const PuzzleListView = ({
           </InputGroup>
         </SearchFormGroup>
       </ViewControls>
-      {renderList(retainedPuzzles, solvedOverConstrains, allPuzzles.length, puzzleSubscribers)}
+      {renderList(
+        retainedPuzzles,
+        solvedOverConstrains,
+        allPuzzles.length,
+        puzzleSubscribers,
+      )}
     </div>
   );
 };
