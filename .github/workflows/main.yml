@@ -17,25 +17,28 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '14.x'
-
+          
       - name: Install Meteor
         run: |
-          curl https://install.meteor.com/ | sh
+          curl "https://install.meteor.com/?release=2.9.1" | sh
           meteor --version
 
+      - name: Install dependencies
+        run: meteor npm install --production
+
       - name: Build app
-        run: meteor build --directory
+        run: meteor build --directory ./
 
       - name: Transfer to VPS
         run: |
-          scp ./bundle.tar.gz jimsug@${{ secrets.VPS_HOST }}:/home/jimsug/app
+          scp ./bundle.tar.gz ${{ vars.JR_VPS_USERNAME }}@${{ vars.JR_VPS_HOST }}:/home/jimsug/app
 
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_PRIVATE_KEY }}
+          host: ${{ vars.JR_VPS_HOST }}
+          username: ${{ vars.JR_VPS_USERNAME }}
+          key: ${{ secrets.JR_VPS_KEY }}
           script: |
             cd /home/jimsug/app
             tar -xzf bundle.tar.gz
