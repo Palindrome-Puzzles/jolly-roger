@@ -29,10 +29,10 @@ jobs:
         run: meteor npm install --production
 
       - name: Create build dir
-        run: mkdir ../${{ GITHUB_SHA }}
+        run: mkdir ../${{ github.sha }}
 
       - name: Build app
-        run: meteor build --directory ../${{ GITHUB_SHA }}
+        run: meteor build --directory ../${{ github.sha }}
 
       - name: Transfer to VPS
         uses: appleboy/scp-action@v0.1.7
