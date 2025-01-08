@@ -1,0 +1,42 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14.x'
+
+      - name: Install Meteor
+        run: |
+          curl https://install.meteor.com/ | sh
+          meteor --version
+
+      - name: Build app
+        run: meteor build --directory
+
+      - name: Transfer to VPS
+        run: |
+          scp ./bundle.tar.gz jimsug@${{ secrets.VPS_HOST }}:/home/jimsug/app
+
+      - name: SSH and deploy
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
+          script: |
+            cd /home/jimsug/app
+            tar -xzf bundle.tar.gz
+            sudo systemctl restart jolly-roger
