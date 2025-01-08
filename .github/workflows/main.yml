@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '14.x'
-          /
+          
       - name: Install Meteor
         run: |
           curl "https://install.meteor.com/?release=2.9.1" | sh
