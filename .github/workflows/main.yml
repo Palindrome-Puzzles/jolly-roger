@@ -34,14 +34,14 @@ jobs:
       - name: Build app
         run: meteor build --directory ../${{ github.sha }}
 
-      - name: Transfer to VPS
-        uses: appleboy/scp-action@v0.1.7
+      - name: Upload
+        uses: betanzos/scp-upload@v1
         with:
           host: ${{ secrets.JR_VPS_HOST }}
           username: ${{ secrets.JR_VPS_USERNAME }}
           key: ${{ secrets.JR_VPS_KEY }}
-          source: "../${{ github.sha }}/jolly-roger.tar.gz"
-          target: "/home/jimsug/app"
+          source: ../${{ github.sha }}/jolly-roger.tar.gz
+          remote_dir: /home/jimsug/app/
 
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
