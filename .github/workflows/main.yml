@@ -35,20 +35,17 @@ jobs:
         run: meteor build --directory ../${{ github.sha }}
 
       - name: Upload
-        uses: betanzos/scp-upload@v1
-        with:
-          host: ${{ secrets.JR_VPS_HOST }}
-          username: ${{ secrets.JR_VPS_USERNAME }}
-          key: ${{ secrets.JR_VPS_KEY }}
-          source: ../${{ github.sha }}/jolly-roger.tar.gz
-          remote_dir: /home/jimsug/app/
-
+        run: |
+          printf %s "${{ secrets.JR_VPS_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          scp ../${{ github.sha }}/jolly-roger.tar.gz ${{ secrets.JR_VPS_USERNAME }}@${{ secrets.JR_VPS_HOST }}:/home/jimsug/app -i ~/.ssh/deploy_key
+        
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.JR_VPS_HOST }}
           username: ${{ secrets.JR_VPS_USERNAME }}
-          key: ${{ secrets.JR_VPS_KEY }}
+          key: ~/.ssh/deploy_key
           script: |
             cd /home/jimsug/app
             tar -xzf bundle.tar.gz
