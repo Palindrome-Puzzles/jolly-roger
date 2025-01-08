@@ -41,7 +41,7 @@ jobs:
           username: ${{ secrets.JR_VPS_USERNAME }}
           key: ${{ secrets.JR_VPS_KEY }}
           source: "../${{ github.sha }}/jolly-roger.tar.gz"
-          target: /home/jimsug/app
+          target: "/home/jimsug/app"
 
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
