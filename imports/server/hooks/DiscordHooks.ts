@@ -96,7 +96,7 @@ const DiscordHooks: Hookset = {
     }
 
     const hunt = (await Hunts.findOneAsync(puzzle.hunt))!;
-    if (hunt.puzzleHooksDiscordChannel) {
+    if (hunt.firehoseDiscordChannel) {
       const title = `${oldPuzzle.title} renamed to ${puzzle.title}`;
       const url = Meteor.absoluteUrl(
         `hunts/${puzzle.hunt}/puzzles/${puzzle._id}`,
@@ -117,7 +117,7 @@ const DiscordHooks: Hookset = {
         },
       };
       await bot.postMessageToChannel(
-        hunt.puzzleHooksDiscordChannel.id,
+        hunt.firehoseDiscordChannel.id,
         messageObj,
       );
     }
