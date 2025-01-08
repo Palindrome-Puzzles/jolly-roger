@@ -46,8 +46,8 @@ jobs:
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: ${{ vars.JR_VPS_HOST }}
-          username: ${{ vars.JR_VPS_USERNAME }}
+          host: ${{ secrets.JR_VPS_HOST }}
+          username: ${{ secrets.JR_VPS_USERNAME }}
           key: ${{ secrets.JR_VPS_KEY }}
           script: |
             cd /home/jimsug/app
