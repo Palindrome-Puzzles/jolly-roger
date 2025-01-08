@@ -28,8 +28,11 @@ jobs:
       - name: Install dependencies
         run: meteor npm install --production
 
+      - name: Create build dir
+        run: mkdir ../
+
       - name: Build app
-        run: meteor build --directory ../builds/
+        run: meteor build --directory ./
 
       - name: Transfer to VPS
         uses: appleboy/scp-action@v0.1.7
@@ -37,10 +40,8 @@ jobs:
           host: ${{ secrets.JR_VPS_HOST }}
           username: ${{ secrets.JR_VPS_USERNAME }}
           key: ${{ secrets.JR_VPS_KEY }}
-          source: ../build/jolly-roger.tar.gz
+          source: ./jolly-roger.tar.gz
           target: /home/jimsug/app
-        
-
 
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
