@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '14.x'
-          
+          /
       - name: Install Meteor
         run: |
           curl "https://install.meteor.com/?release=2.9.1" | sh
@@ -29,10 +29,10 @@ jobs:
         run: meteor npm install --production
 
       - name: Create build dir
-        run: mkdir ../
+        run: mkdir ../${{ GITHUB_SHA }}
 
       - name: Build app
-        run: meteor build --directory ./
+        run: meteor build --directory ../${{ GITHUB_SHA }}
 
       - name: Transfer to VPS
         uses: appleboy/scp-action@v0.1.7
@@ -40,7 +40,7 @@ jobs:
           host: ${{ secrets.JR_VPS_HOST }}
           username: ${{ secrets.JR_VPS_USERNAME }}
           key: ${{ secrets.JR_VPS_KEY }}
-          source: ./jolly-roger.tar.gz
+          source: ../${{ GITHUB_SHA }}/jolly-roger.tar.gz
           target: /home/jimsug/app
 
       - name: SSH and deploy
