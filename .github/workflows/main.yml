@@ -8,6 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      MEDIASOUP_WORKER_PREBUILT_DOWNLOAD_BASE_URL: https://github.com/versatica/mediasoup/releases/download
 
     steps:
       - name: Checkout code
@@ -27,11 +29,18 @@ jobs:
         run: meteor npm install --production
 
       - name: Build app
-        run: meteor build --directory ./
+        run: meteor build --directory ../builds/
 
       - name: Transfer to VPS
-        run: |
-          scp ./bundle.tar.gz ${{ vars.JR_VPS_USERNAME }}@${{ vars.JR_VPS_HOST }}:/home/jimsug/app
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.JR_VPS_HOST }}
+          username: ${{ secrets.JR_VPS_USERNAME }}
+          key: ${{ secrets.JR_VPS_KEY }}
+          source: ../build/jolly-roger.tar.gz
+          target: /home/jimsug/app
+        
+
 
       - name: SSH and deploy
         uses: appleboy/ssh-action@v0.1.4
