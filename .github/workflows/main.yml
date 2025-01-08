@@ -40,7 +40,7 @@ jobs:
           host: ${{ secrets.JR_VPS_HOST }}
           username: ${{ secrets.JR_VPS_USERNAME }}
           key: ${{ secrets.JR_VPS_KEY }}
-          source: ../${{ GITHUB_SHA }}/jolly-roger.tar.gz
+          source: ../${{ github.sha }}/jolly-roger.tar.gz
           target: /home/jimsug/app
 
       - name: SSH and deploy
