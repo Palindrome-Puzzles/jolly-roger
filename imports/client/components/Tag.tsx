@@ -124,7 +124,7 @@ const TagDiv = styled.div<{
   ${({ $isMetaFor }) =>
     $isMetaFor &&
     css`
-      background-color: #ffff00;
+      background-color: #ff0;
     `}
   ${({ $isNeeds }) =>
     $isNeeds &&
@@ -345,7 +345,7 @@ const Tag = (props: TagProps) => {
     } else {
       nameWithBreaks.push(`${part}${withColon ? ":" : ""}`);
     }
-    nameWithBreaks.push(` `);
+    nameWithBreaks.push("\u00A0");
     if (withColon) {
       // eslint-disable-next-line react/no-array-index-key
       nameWithBreaks.push(<wbr key={`wbr-${i}-${part}`} />);
