@@ -487,7 +487,7 @@ const PuzzleListView = ({
         </Alert>
       );
       const retainedIds = new Set(retainedPuzzles.map((puzzle) => puzzle._id));
-      const filterMessage = `Showing ${retainedPuzzles.length} of ${allPuzzlesCount} items`;
+      const filterMessage = `Showing ${retainedPuzzles.length} of ${allPuzzlesCount} rows`;
 
       const bookmarkedPuzzles = retainedPuzzles.filter((puzzle) =>
         bookmarked.has(puzzle._id),
