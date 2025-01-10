@@ -1,11 +1,11 @@
 import { useTracker } from "meteor/react-meteor-data";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { faPenNib, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDoubleUp } from "@fortawesome/free-solid-svg-icons/faAngleDoubleUp";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faMinus } from "@fortawesome/free-solid-svg-icons/faMinus";
 import { faPuzzlePiece } from "@fortawesome/free-solid-svg-icons/faPuzzlePiece";
-import { faAngleDoubleUp } from "@fortawesome/free-solid-svg-icons/faAngleDoubleUp";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, {
   type ComponentPropsWithRef,
@@ -359,9 +359,17 @@ const Puzzle = React.memo(
       .filter((t) => emojifiedTags.includes(t.name))
       .map((t) => t._id);
 
+    const suppressedMetaTagNames = suppressTags
+      ?.map((t) => tagIndex.get(t)?.name.replace(/^group:/, "meta-for:"))
+      .filter((t) => t?.startsWith("meta-for:"));
+
+    const suppressedMetaTags = allTags
+      .filter((t) => suppressedMetaTagNames?.includes(t.name))
+      .map((t) => t._id);
+
     const shownTags = difference(
       puzzle.tags,
-      suppressTags?.concat(extraSuppress) ?? [],
+      suppressTags?.concat(extraSuppress).concat(suppressedMetaTags) ?? [],
     );
     const ownTags = shownTags
       .map((tagId) => {
