@@ -121,7 +121,7 @@ const TagDiv = styled.div<{
   ${({ $isMetaFor }) =>
     $isMetaFor &&
     css`
-      background-color: #ffb0b0;
+      background-color: #ffff00;
     `}
   ${({ $isNeeds }) =>
     $isNeeds &&
@@ -333,8 +333,12 @@ const Tag = (props: TagProps) => {
   const nameWithBreaks: (string | React.JSX.Element)[] = [];
   name.split(":").forEach((part, i, arr) => {
     const withColon = i < arr.length - 1;
-    if (isMetaFor && i == 0 && !props.popoverRelated) {
-      nameWithBreaks.push(`👑 `);
+    if (isGroup && i == 0 && !props.popoverRelated) {
+      nameWithBreaks.push(`📦 `);
+    } else if (isMetaFor && i == 0 && !props.popoverRelated) {
+      nameWithBreaks.push(`🤘`);
+    } else if (isLocation && i == 0 && !props.popoverRelated) {
+      nameWithBreaks.push(`📍`);
     } else {
       nameWithBreaks.push(`${part}${withColon ? ":" : ""}`);
     }

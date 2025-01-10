@@ -568,6 +568,7 @@ const PuzzleListView = ({
           <PuzzleListToolbar>
             <div>{listControls}</div>
             <div>{filterMessage}</div>
+            <div>📦 = group; 🤘 = meta; 📍 = where</div>
           </PuzzleListToolbar>
           {bookmarkedPuzzles.length > 0 && (
             <PuzzleGroupDiv>
