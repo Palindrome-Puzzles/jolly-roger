@@ -2,7 +2,7 @@
 import { faAlignJustify } from "@fortawesome/free-solid-svg-icons/faAlignJustify";
 import { faCopy } from "@fortawesome/free-solid-svg-icons/faCopy";
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
-import { faDatabase } from "@fortawesome/free-solid-svg-icons/faDatabase";
+import { faFolderOpen } from "@fortawesome/free-regular-svg-icons/faFolderOpen";
 import { faMapPin } from "@fortawesome/free-solid-svg-icons/faMapPin";
 import { faStar } from "@fortawesome/free-solid-svg-icons/faStar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -337,7 +337,7 @@ const Tag = (props: TagProps) => {
   name.split(":").forEach((part, i, arr) => {
     const withColon = i < arr.length - 1;
     if (isGroup && i == 0 && !props.popoverRelated) {
-      nameWithBreaks.push(<FontAwesomeIcon icon={faDatabase} />);
+      nameWithBreaks.push(<FontAwesomeIcon icon={faFolderOpen} />);
     } else if (isMetaFor && i == 0 && !props.popoverRelated) {
       nameWithBreaks.push(<FontAwesomeIcon icon={faStar} />);
     } else if (isLocation && i == 0 && !props.popoverRelated) {
