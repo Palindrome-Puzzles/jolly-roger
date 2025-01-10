@@ -336,11 +336,11 @@ const Tag = (props: TagProps) => {
   const nameWithBreaks: (string | React.JSX.Element)[] = [];
   name.split(":").forEach((part, i, arr) => {
     const withColon = i < arr.length - 1;
-    if (isGroup && i == 0 && !props.popoverRelated) {
+    if (isGroup && i === 0) {
       nameWithBreaks.push(<FontAwesomeIcon icon={faFolderOpen} />);
-    } else if (isMetaFor && i == 0 && !props.popoverRelated) {
+    } else if (isMetaFor && i === 0) {
       nameWithBreaks.push(<FontAwesomeIcon icon={faStar} />);
-    } else if (isLocation && i == 0 && !props.popoverRelated) {
+    } else if (isLocation && i === 0) {
       nameWithBreaks.push(<FontAwesomeIcon icon={faMapPin} />);
     } else {
       nameWithBreaks.push(`${part}${withColon ? ":" : ""}`);
