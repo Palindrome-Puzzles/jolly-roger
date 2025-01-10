@@ -2,6 +2,9 @@
 import { faAlignJustify } from "@fortawesome/free-solid-svg-icons/faAlignJustify";
 import { faCopy } from "@fortawesome/free-solid-svg-icons/faCopy";
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
+import { faDatabase } from "@fortawesome/free-solid-svg-icons/faDatabase";
+import { faMapPin } from "@fortawesome/free-solid-svg-icons/faMapPin";
+import { faStar } from "@fortawesome/free-solid-svg-icons/faStar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ModifierArguments, Modifier, Padding } from "@popperjs/core";
 import detectOverflow from "@popperjs/core/lib/utils/detectOverflow";
@@ -334,14 +337,15 @@ const Tag = (props: TagProps) => {
   name.split(":").forEach((part, i, arr) => {
     const withColon = i < arr.length - 1;
     if (isGroup && i == 0 && !props.popoverRelated) {
-      nameWithBreaks.push(`📦 `);
+      nameWithBreaks.push(<FontAwesomeIcon icon={faDatabase} />);
     } else if (isMetaFor && i == 0 && !props.popoverRelated) {
-      nameWithBreaks.push(`🤘`);
+      nameWithBreaks.push(<FontAwesomeIcon icon={faStar} />);
     } else if (isLocation && i == 0 && !props.popoverRelated) {
-      nameWithBreaks.push(`📍`);
+      nameWithBreaks.push(<FontAwesomeIcon icon={faMapPin} />);
     } else {
       nameWithBreaks.push(`${part}${withColon ? ":" : ""}`);
     }
+    nameWithBreaks.push(` `);
     if (withColon) {
       // eslint-disable-next-line react/no-array-index-key
       nameWithBreaks.push(<wbr key={`wbr-${i}-${part}`} />);

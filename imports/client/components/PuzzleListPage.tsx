@@ -3,6 +3,9 @@ import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons/faCaretDown";
 import { faEraser } from "@fortawesome/free-solid-svg-icons/faEraser";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
+import { faDatabase } from "@fortawesome/free-solid-svg-icons/faDatabase";
+import { faMapPin } from "@fortawesome/free-solid-svg-icons/faMapPin";
+import { faStar } from "@fortawesome/free-solid-svg-icons/faStar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, {
   type ComponentPropsWithRef,
@@ -568,7 +571,11 @@ const PuzzleListView = ({
           <PuzzleListToolbar>
             <div>{listControls}</div>
             <div>{filterMessage}</div>
-            <div>📦 = group; 🤘 = meta for; 📍 = where</div>
+            <div>
+              <FontAwesomeIcon icon={faDatabase} /> = group;{" "}
+              <FontAwesomeIcon icon={faStar} /> = meta for;{" "}
+              <FontAwesomeIcon icon={faMapPin} /> = where
+            </div>
           </PuzzleListToolbar>
           {bookmarkedPuzzles.length > 0 && (
             <PuzzleGroupDiv>
