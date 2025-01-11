@@ -6,6 +6,7 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons/faAngleDown";
 import { faEdit } from "@fortawesome/free-solid-svg-icons/faEdit";
 import { faMinus } from "@fortawesome/free-solid-svg-icons/faMinus";
 import { faPuzzlePiece } from "@fortawesome/free-solid-svg-icons/faPuzzlePiece";
+import { faStar } from "@fortawesome/free-solid-svg-icons/faStar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, {
   type ComponentPropsWithRef,
@@ -154,6 +155,7 @@ const PuzzleMetaColumn = styled(PuzzleColumn)`
   padding: 0 2px;
   display: inline-block;
   flex: 1.5;
+  font-size: 1.1rem;
   margin: -2px -4px -2px 0;
   ${mediaBreakpointDown(
     "xs",
@@ -437,13 +439,15 @@ const Puzzle = React.memo(
     const puzzleIsMeta = useTracker(() => {
       if (isMetameta) {
         return (
-          <Badge pill bg="secondary">
+          <Badge pill bg="warning" text="dark">
+            <FontAwesomeIcon icon={faStar} />
             Metameta
           </Badge>
         );
       } else if (isMeta) {
         return (
-          <Badge pill bg="secondary">
+          <Badge pill bg="warning" text="dark">
+            <FontAwesomeIcon icon={faStar} />
             Meta
           </Badge>
         );
