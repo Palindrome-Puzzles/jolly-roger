@@ -369,10 +369,21 @@ const Puzzle = React.memo(
       .filter((t) => suppressedMetaTagNames?.includes(t.name))
       .map((t) => t._id);
 
+    const shownMetaTags = puzzle.tags.filter((item) =>
+      suppressedMetaTags.includes(item),
+    );
+
+    const ownMetaTags = shownMetaTags
+      .map((tagId) => {
+        return tagIndex.get(tagId);
+      })
+      .filter<TagType>((t): t is TagType => t !== undefined);
+
     const shownTags = difference(
       puzzle.tags,
       suppressTags?.concat(extraSuppress).concat(suppressedMetaTags) ?? [],
     );
+
     const ownTags = shownTags
       .map((tagId) => {
         return tagIndex.get(tagId);
@@ -512,7 +523,12 @@ const Puzzle = React.memo(
             </OverlayTrigger>
           ) : null}
         </PuzzlePriorityColumn>
-        <PuzzleMetaColumn>{puzzleIsMeta}</PuzzleMetaColumn>
+        <TagListColumn
+          puzzle={puzzle}
+          tags={ownMetaTags}
+          linkToSearch
+          popoverRelated={false}
+        />
         <SolversColumn>
           {showSolvers && solvedness === "unsolved" ? (
             <div>
