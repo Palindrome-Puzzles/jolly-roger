@@ -433,6 +433,10 @@ const Puzzle = React.memo(
         );
       }
 
+      if (noteTT.length === 0) {
+        return null;
+      }
+
       return (
         <Tooltip
           id={`puzzle-pin-message-${puzzleId}`}
