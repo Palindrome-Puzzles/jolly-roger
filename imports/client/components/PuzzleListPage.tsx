@@ -437,12 +437,13 @@ const PuzzleListView = ({
   const callMembersLoading = useSubscribe("mediasoup:metadataAll", huntId);
 
   const displayNamesLoading = useSubscribeDisplayNames(huntId);
-  const displayNames = indexedDisplayNames();
 
   const subscriptionsLoading =
     subscribersLoading() || callMembersLoading() || displayNamesLoading();
 
   const puzzleSubscribers = useTracker(() => {
+    const displayNames = indexedDisplayNames();
+
     if (subscriptionsLoading) {
       return { none: { none: [] } };
     }
@@ -482,7 +483,7 @@ const PuzzleListView = ({
       }
     });
     return puzzleSubs;
-  }, [displayNames, subscriptionsLoading]);
+  }, [subscriptionsLoading]);
 
   const renderList = useCallback(
     (
