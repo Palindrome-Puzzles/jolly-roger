@@ -603,7 +603,11 @@ const ChatNotificationMessage = ({
           {calendarTimeFormat(cn.createdAt)}
         </StyledNotificationTimestamp>
       </Toast.Header>
-      <Toast.Body>
+      <Toast.Body
+        style={{
+          maxHeight: "30rem",
+        }}
+      >
         <div>
           <ChatMessage
             message={cn.content}
