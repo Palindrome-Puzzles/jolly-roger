@@ -307,7 +307,13 @@ const GuessMessage = React.memo(
           )}
         </Toast.Header>
         <Toast.Body>
-          <StyledNotificationRow>
+          <StyledNotificationRow
+            style={{
+              maxHeight: "15rem",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
             <PuzzleAnswer answer={guess.guess} breakable />
           </StyledNotificationRow>
           <StyledNotificationActionBar>
@@ -603,11 +609,7 @@ const ChatNotificationMessage = ({
           {calendarTimeFormat(cn.createdAt)}
         </StyledNotificationTimestamp>
       </Toast.Header>
-      <Toast.Body
-        style={{
-          maxHeight: "30rem",
-        }}
-      >
+      <Toast.Body>
         <div>
           <ChatMessage
             message={cn.content}
