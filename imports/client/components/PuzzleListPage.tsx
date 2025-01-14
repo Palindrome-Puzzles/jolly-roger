@@ -742,12 +742,8 @@ const PuzzleListView = ({
                 variant="outline-info"
                 value="hide"
               >
-<<<<<<< HEAD
                 <FontAwesomeIcon icon={faCircle} key="puzzles-unsolved" />{" "}
                 Unsolved
-=======
-                <FontAwesomeIcon icon={faCircle} key="puzzles-unsolved" />
->>>>>>> main
               </ToggleButton>
               <ToggleButton
                 id="solved-show-button"
