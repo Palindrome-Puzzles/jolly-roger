@@ -341,10 +341,9 @@ const OwnProfilePage = ({
       setDingwordsFlat(e.currentTarget.value);
     }, []);
 
-  const handleDingwordsModeChange: NonNullable<FormControlProps["onChange"]> =
-    useCallback((e) => {
-      setDingwordsOpenMatch(e.currentTarget.value === "open");
-    }, []);
+  const handleDingwordsModeChange = useCallback((newMode: string) => {
+    setDingwordsOpenMatch(newMode === "open");
+  }, []);
 
   const handleSaveForm = useCallback(() => {
     const trimmedDisplayName = displayName.trim();
@@ -365,6 +364,7 @@ const OwnProfilePage = ({
       displayName: trimmedDisplayName,
       phoneNumber: phoneNumber !== "" ? phoneNumber : undefined,
       dingwords,
+      dingwordsOpenMatch,
     };
     updateProfile.call(newProfile, (error) => {
       if (error) {
@@ -374,7 +374,7 @@ const OwnProfilePage = ({
         setSubmitState(OwnProfilePageSubmitState.SUCCESS);
       }
     });
-  }, [dingwordsFlat, displayName, phoneNumber]);
+  }, [dingwordsFlat, dingwordsOpenMatch, displayName, phoneNumber]);
 
   const dismissAlert = useCallback(() => {
     setSubmitState(OwnProfilePageSubmitState.IDLE);
@@ -497,7 +497,7 @@ const OwnProfilePage = ({
         />
         <FormText>
           If anyone sends a chat message, or adds a tag, that contains one of
-          your dingwords, you'll get a notification. Separate dingwords by
+          your dingwords, you&apos;ll get a notification. Separate dingwords by
           commas. Spaces are allowed.
           <br />
           Words and phrases must match exactly, so a dingword of{" "}

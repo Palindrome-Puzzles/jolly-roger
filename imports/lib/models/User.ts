@@ -49,6 +49,7 @@ export const User = z.object({
   discordAccount: DiscordAccount.optional(),
   phoneNumber: nonEmptyString.optional(),
   dingwords: nonEmptyString.array().optional(),
+  dingwordsOpenMatch: z.boolean().optional(),
 });
 validateSchema(User);
 
@@ -57,6 +58,7 @@ export type ProfileFields =
   | "googleAccount"
   | "discordAccount"
   | "phoneNumber"
-  | "dingwords";
+  | "dingwords"
+  | "dingwordsOpenMatch";
 
 export default User;
