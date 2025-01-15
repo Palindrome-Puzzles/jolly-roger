@@ -500,10 +500,8 @@ const OwnProfilePage = ({
           your dingwords, you&apos;ll get a notification. Separate dingwords by
           commas. Spaces are allowed.
           <br />
-          Words and phrases must match exactly, so a dingword of{" "}
-          <code>cake baking</code> will not trigger an alert upon mentions of{" "}
-          <code>baking</code>, <code>bake</code>, or <code>cake</code>. Only if
-          someone enters <code>cake baking</code> exactly.
+          The dingwords will be matched according to your preference selected
+          below.
         </FormText>
       </FormGroup>
 
