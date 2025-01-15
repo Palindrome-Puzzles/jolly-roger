@@ -4,6 +4,8 @@ import { ServiceConfiguration } from "meteor/service-configuration";
 import { faCopy } from "@fortawesome/free-solid-svg-icons/faCopy";
 import { faPuzzlePiece } from "@fortawesome/free-solid-svg-icons/faPuzzlePiece";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
+import { faKey } from "@fortawesome/free-solid-svg-icons/faKey";
+import { faComment } from "@fortawesome/free-solid-svg-icons/faComment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
@@ -280,10 +282,12 @@ const GuessMessage = React.memo(
       <Toast onClose={dismissGuess}>
         <Toast.Header>
           <StyledGuessHeader>
+            <FontAwesomeIcon icon={faKey} style={{ marginRight: ".4em" }} />
             Guess for{" "}
             <a href={linkTarget} target="_blank" rel="noopener noreferrer">
               {puzzle.title}
             </a>{" "}
+            {/* 
             from{" "}
             <a
               href={`/users/${guess.createdBy}`}
@@ -292,6 +296,7 @@ const GuessMessage = React.memo(
             >
               {guesser}
             </a>
+             */}
           </StyledGuessHeader>
           <StyledNotificationTimestamp>
             {calendarTimeFormat(guess.createdAt)}
@@ -441,6 +446,7 @@ const AnnouncementMessage = React.memo(
         createdAt={announcement.createdAt}
         displayName={createdByDisplayName}
         onClose={onDismiss}
+        className="text-bg-warning"
       />
     );
   },
@@ -542,12 +548,14 @@ const PuzzleNotificationMessage = ({
   puzzle,
   content,
   ephemeral,
+  className,
 }: {
   pn: PuzzleNotificationType;
   hunt: HuntType;
   puzzle: PuzzleType;
   content: string;
   ephemeral: boolean | undefined;
+  className?: string;
 }) => {
   const id = pn._id;
   const dismiss = useCallback(
@@ -555,9 +563,14 @@ const PuzzleNotificationMessage = ({
     [id],
   );
 
+  const ephemeralLingerPeriod = 5000;
+  const startTime = Date.now();
+  const endTime = startTime + 5000;
+
   return (
-    <Toast onClose={dismiss} delay={5000} autohide={ephemeral}>
+    <Toast onClose={dismiss} delay={ephemeralLingerPeriod} autohide={ephemeral}>
       <Toast.Header>
+        <FontAwesomeIcon icon={faPuzzlePiece} style={{ marginRight: ".4em" }} />
         <strong className="me-auto">
           <Link to={`/hunts/${hunt._id}/puzzles/${puzzle._id}`}>
             {puzzle.title}
@@ -566,6 +579,15 @@ const PuzzleNotificationMessage = ({
         <StyledNotificationTimestamp>
           {calendarTimeFormat(pn.createdAt)}
         </StyledNotificationTimestamp>
+        {ephemeral && (
+          <SpinnerTimer
+            className="ms-3"
+            width={16}
+            height={16}
+            startTime={startTime}
+            endTime={endTime}
+          />
+        )}
       </Toast.Header>
       <Toast.Body>
         <div>{content}</div>
@@ -596,11 +618,12 @@ const ChatNotificationMessage = ({
   const senderDisplayName = displayNames.get(cn.sender) ?? "???";
 
   return (
-    <Toast onClose={dismiss}>
+    <Toast className="bg-info-subtle" onClose={dismiss}>
       <Toast.Header>
+        <FontAwesomeIcon icon={faComment} style={{ marginRight: ".4em" }} />
         <strong className="me-auto">
-          {senderDisplayName}
-          {" on "}
+          {/* {senderDisplayName} */}
+          {/* {" on "} */}
           <Link to={`/hunts/${hunt._id}/puzzles/${puzzle._id}`}>
             {puzzle.title}
           </Link>
@@ -1016,6 +1039,7 @@ const NotificationCenter = () => {
         puzzle={puzzle}
         content={pn.content}
         ephemeral={pn.ephemeral ?? false}
+        className={pn.className}
       />,
     );
   });
