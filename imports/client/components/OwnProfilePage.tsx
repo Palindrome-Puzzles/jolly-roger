@@ -27,6 +27,8 @@ import { requestDiscordCredential } from "../discord";
 import ActionButtonRow from "./ActionButtonRow";
 import AudioConfig from "./AudioConfig";
 import Avatar from "./Avatar";
+import { Form } from "react-bootstrap";
+import LabelledRadioGroup from "./LabelledRadioGroup";
 
 enum GoogleLinkBlockLinkState {
   IDLE = "idle",
@@ -311,6 +313,9 @@ const OwnProfilePage = ({
   const [dingwordsFlat, setDingwordsFlat] = useState<string>(
     initialUser.dingwords ? initialUser.dingwords.join(",") : "",
   );
+  const [dingwordsOpenMatch, setDingwordsOpenMatch] = useState<boolean>(
+    initialUser.dingwordsOpenMatch ?? false,
+  );
   const [submitState, setSubmitState] = useState<OwnProfilePageSubmitState>(
     OwnProfilePageSubmitState.IDLE,
   );
@@ -334,6 +339,11 @@ const OwnProfilePage = ({
   const handleDingwordsChange: NonNullable<FormControlProps["onChange"]> =
     useCallback((e) => {
       setDingwordsFlat(e.currentTarget.value);
+    }, []);
+
+  const handleDingwordsModeChange: NonNullable<FormControlProps["onChange"]> =
+    useCallback((e) => {
+      setDingwordsOpenMatch(e.currentTarget.value === "open");
     }, []);
 
   const handleSaveForm = useCallback(() => {
@@ -495,6 +505,46 @@ const OwnProfilePage = ({
           <code>baking</code>, <code>bake</code>, or <code>cake</code>. Only if
           someone enters <code>cake baking</code> exactly.
         </FormText>
+      </FormGroup>
+
+      <FormGroup className="mb-3">
+        <FormLabel htmlFor="jr-profile-dingwords-open">
+          Dingwords mode
+        </FormLabel>
+        <LabelledRadioGroup
+          header=""
+          name="jr-new-puzzle-doc-type"
+          options={[
+            {
+              value: "exact",
+              label: (
+                <>
+                  <strong>Exact matching (default):</strong> you will be
+                  notified only if one or more of your dingwords match words in
+                  a message. For example, your dingword <code>cake baking</code>{" "}
+                  match <code>cake baking</code>, but will not match{" "}
+                  <code>cake</code>, <code>baking</code>, or <code>bake</code>.
+                </>
+              ),
+            },
+            {
+              value: "open",
+              label: (
+                <>
+                  <strong>Open matching:</strong> you will be notified if any
+                  set of words in a message starts with your dingword. For
+                  example, your dingword <code>logic puzzle</code> will match{" "}
+                  <code>logic puzzle</code>, <code>logic puzzles</code> and{" "}
+                  <code>logic puzzled</code>, but not{" "}
+                  <code>logic puzzling</code>.
+                </>
+              ),
+            },
+          ]}
+          initialValue={dingwordsOpenMatch ? "open" : "exact"}
+          help=""
+          onChange={handleDingwordsModeChange}
+        />
       </FormGroup>
 
       <ActionButtonRow>

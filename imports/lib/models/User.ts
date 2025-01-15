@@ -17,6 +17,7 @@ declare module "meteor/meteor" {
       discordAccount?: DiscordAccountType;
       phoneNumber?: string;
       dingwords?: string[];
+      dingwordsOpenMatch?: boolean;
     }
   }
 }
