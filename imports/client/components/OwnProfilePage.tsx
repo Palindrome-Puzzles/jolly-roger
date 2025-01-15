@@ -499,15 +499,12 @@ const OwnProfilePage = ({
           If anyone sends a chat message, or adds a tag, that contains one of
           your dingwords, you&apos;ll get a notification. Separate dingwords by
           commas. Spaces are allowed.
-          <br />
-          The dingwords will be matched according to your preference selected
-          below.
         </FormText>
       </FormGroup>
 
       <FormGroup className="mb-3">
         <FormLabel htmlFor="jr-profile-dingwords-open">
-          Dingwords mode
+          Dingwords matching mode
         </FormLabel>
         <LabelledRadioGroup
           header=""
@@ -517,11 +514,9 @@ const OwnProfilePage = ({
               value: "exact",
               label: (
                 <>
-                  <strong>Exact matching (default):</strong> you will be
-                  notified only if one or more of your dingwords match words in
-                  a message. For example, your dingword <code>cake baking</code>{" "}
-                  match <code>cake baking</code>, but will not match{" "}
-                  <code>cake</code>, <code>baking</code>, or <code>bake</code>.
+                  <strong>Match precisely:</strong> dingwords and -phrases must
+                  match the typed text <em>exactly</em> in order to trigger an
+                  alert.
                 </>
               ),
             },
@@ -529,12 +524,10 @@ const OwnProfilePage = ({
               value: "open",
               label: (
                 <>
-                  <strong>Open matching:</strong> you will be notified if any
-                  set of words in a message starts with your dingword. For
-                  example, your dingword <code>logic puzzle</code> will match{" "}
-                  <code>logic puzzle</code>, <code>logic puzzles</code> and{" "}
-                  <code>logic puzzled</code>, but not{" "}
-                  <code>logic puzzling</code>.
+                  <strong>Match start:</strong> dingwords and -phrases only need
+                  to match the <em>start</em> of a typed word or phrase. For
+                  example, the dingword <code>logic</code> would match "logic",
+                  "logician", and "logical", but not "illogical".
                 </>
               ),
             },
