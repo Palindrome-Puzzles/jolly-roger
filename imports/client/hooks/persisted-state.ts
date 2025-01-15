@@ -10,7 +10,7 @@ export const useOperatorActionsHiddenForHunt = (huntId: string) => {
   const [operatorActionsHidden, setOperatorActionsHidden] =
     useOperatorActionsHidden();
   return [
-    operatorActionsHidden?.[huntId] ?? false,
+    operatorActionsHidden?.[huntId] ?? true,
     useCallback(
       (update: SetStateAction<boolean>) => {
         setOperatorActionsHidden((prevHidden) => {
@@ -18,7 +18,7 @@ export const useOperatorActionsHiddenForHunt = (huntId: string) => {
             ...prevHidden,
             [huntId]:
               typeof update === "function"
-                ? update(prevHidden?.[huntId] ?? false)
+                ? update(prevHidden?.[huntId] ?? true)
                 : update,
           };
           return newHidden;
