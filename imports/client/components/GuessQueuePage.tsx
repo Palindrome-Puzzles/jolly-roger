@@ -174,9 +174,15 @@ const StyledPuzzleTimestampAndSubmitter = styled.div`
 `;
 
 const StyledPuzzleTimestamp = styled(StyledCell)`
+  color: #888;
+  font-size: .9rem;
+
   ${mediaBreakpointDown(
     compactViewBreakpoint,
     css`
+      line-height: 1.7;
+      margin-right: .5em;
+
       ::after {
         content: " submitted by ";
         white-space: pre;
@@ -191,10 +197,10 @@ const StyledPuzzleCell = styled(StyledCell)`
   ${mediaBreakpointDown(
     compactViewBreakpoint,
     css`
-      &::before {
-        content: "Puzzle: ";
-        white-space: pre;
-      }
+      /* &::before { */
+        /* content: "Puzzle: "; */
+        /* white-space: pre; */
+      /* } */
     `,
   )}
 `;
@@ -206,10 +212,10 @@ const StyledGuessCell = styled(StyledCell)`
   ${mediaBreakpointDown(
     compactViewBreakpoint,
     css`
-      &::before {
-        content: "Guess: ";
-        white-space: pre;
-      }
+      /* &::before { */
+        /* content: "Guess: "; */
+        /* white-space: pre; */
+      /* } */
     `,
   )}
 `;
@@ -244,6 +250,23 @@ const StyledGuessDetailLabel = styled.span`
     compactViewBreakpoint,
     css`
       display: inline;
+    `,
+  )}
+`;
+
+const StyledGuessStatuses = styled.div`
+  display: contents;
+  background-color: inherit;
+  ${mediaBreakpointDown(
+    compactViewBreakpoint,
+    css`
+      padding: 4px;
+      display: flex;
+
+      & > * {
+        padding: 0;
+        margin-right: .5em;
+      }
     `,
   )}
 `;
@@ -288,6 +311,11 @@ const GuessBlock = React.memo(
     const copyTooltip = (
       <Tooltip id={`guess-${guess._id}-copy-tooltip`}>
         Copy to clipboard
+      </Tooltip>
+    );
+    const requeueTooltip = (
+      <Tooltip>
+        Return this guess to the queue
       </Tooltip>
     );
 
@@ -365,29 +393,31 @@ const GuessBlock = React.memo(
         </StyledGuessCell>
         {hunt.hasGuessQueue && (
           <>
-            <StyledCell>
-              <Badge bg={directionVariant}>{directionLabel}</Badge>
-            </StyledCell>
-            <StyledCell>
-              <Badge bg={confidenceVariant}>{confidenceLabel}</Badge>
-            </StyledCell>
-          </>
-        )}
-        <StyledCell>
-          <GuessState id={`guess-${guess._id}-state`} state={guess.state} />
-        </StyledCell>
-        {hunt.hasGuessQueue && (
+            <StyledGuessStatuses>
+              <StyledCell>
+                <Badge bg={directionVariant}>{directionLabel}</Badge>
+              </StyledCell>
+              <StyledCell>
+                <Badge bg={confidenceVariant}>{confidenceLabel}</Badge>
+              </StyledCell>
+              <StyledCell>
+                <GuessState id={`guess-${guess._id}-state`} state={guess.state} />
+              </StyledCell>
           <StyledCell>
             {canEdit && guess.state !== "pending" && (
+              <OverlayTrigger placement="top" overlay={requeueTooltip}>
               <Button
                 variant="outline-secondary"
                 size="sm"
                 onClick={markPending}
-              >
-                Return to queue
+                >
+                Re-queue
               </Button>
+              </OverlayTrigger>
             )}
           </StyledCell>
+            </StyledGuessStatuses>
+          </>
         )}
         {guess.additionalNotes && (
           <Markdown as={StyledAdditionalNotes} text={guess.additionalNotes} />
