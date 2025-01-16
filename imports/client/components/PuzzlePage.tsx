@@ -1773,7 +1773,7 @@ const PuzzleGuessModal = React.forwardRef(
             </GuessTable>,
             <br />,
             <Alert variant="info">
-              To mark answers correct or incorrect, you must have Visit the <Link to={`/hunts/${huntId}`}>Deputy View</Link> toggled on. As Deputy, alerts will popup for all pending submissions. To view alerts you've dismissed, just reload the site.
+              To mark answers correct or incorrect, you must have the <Link to={`/hunts/${huntId}`}>Deputy View</Link> toggled on. As Deputy, alerts will popup for all pending submissions. To view alerts you've dismissed, just reload the site.
             </Alert>
         )}
         {confirmingSubmit ? (
