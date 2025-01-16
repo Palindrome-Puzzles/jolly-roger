@@ -3,7 +3,6 @@ import { useTracker } from "meteor/react-meteor-data";
 import { faCopy } from "@fortawesome/free-solid-svg-icons/faCopy";
 import { faEraser } from "@fortawesome/free-solid-svg-icons/faEraser";
 import { faPuzzlePiece } from "@fortawesome/free-solid-svg-icons/faPuzzlePiece";
-import { faPenNib } from "@fortawesome/free-solid-svg-icons/faPenNib";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, {
   type ComponentPropsWithRef,
@@ -348,10 +347,9 @@ const GuessBlock = React.memo(
           </OverlayTrigger>{" "}
           <OverlayTrigger placement="top" overlay={discussionTooltip}>
             <Link to={`/hunts/${puzzle.hunt}/puzzles/${puzzle._id}`}>
-              <FontAwesomeIcon icon={faPenNib} fixedWidth />
+              <Breakable>{puzzle.title}</Breakable>
             </Link>
           </OverlayTrigger>{" "}
-          <Breakable>{puzzle.title}</Breakable>
         </StyledPuzzleCell>
         <StyledGuessCell>
           <OverlayTrigger placement="top" overlay={copyTooltip}>
