@@ -78,7 +78,7 @@ const MoreAppPage = () => {
   return (
     <FixedLayout>
       <FirehosePageLayout>
-        <h1>More resources</h1>
+        <h1>More Resources</h1>
         {hunt && <Markdown text={hunt.moreInfo ?? ""} />}
         <hr />
         <h2>Bookmarklet</h2>
