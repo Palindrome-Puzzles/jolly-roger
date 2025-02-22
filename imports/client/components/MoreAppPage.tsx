@@ -57,6 +57,27 @@ const MoreAppPage = () => {
 
   useBreadcrumb({ title: "More", path: `/hunts/${huntId}/more` });
 
+  const puzzlesLoading = useTypedSubscribe(puzzlesForPuzzleList, {
+    huntId,
+    includeDeleted: false,
+  });
+
+  const loading = puzzlesLoading();
+
+  const administriviaTag = useTracker(() => {
+    if (!huntId || loading) {
+      return null;
+    }
+    return Tags.findOne({ hunt: huntId, name: "administrivia" });
+  }, [huntId, loading]);
+
+  const administriviaPuzzles = useTracker(() => {
+    if (!huntId || !administriviaTag || loading) {
+      return null;
+    }
+    return Puzzles.find({ hunt: huntId, tags: administriviaTag._id }).fetch();
+  }, [huntId, loading, administriviaTag]);
+
   const jr_host = window.location.host;
   const protocol = window.location.protocol;
   const bookmarklet = useMemo(() => {
@@ -117,10 +138,10 @@ const MoreAppPage = () => {
           </li>
         </ul>
 
-        {/* 
+        {/*
         <Alert variant="warning">
         Note: You'll need a new/different version of this for each hunt.
-        </Alert> 
+        </Alert>
         */}
 
         <hr />
