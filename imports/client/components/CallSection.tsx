@@ -26,6 +26,7 @@ import MeteorUsers from "../../lib/models/MeteorUsers";
 import type { PeerType } from "../../lib/models/mediasoup/Peers";
 import mediasoupRemoteMutePeer from "../../methods/mediasoupRemoteMutePeer";
 import type { Action, CallState } from "../hooks/useCallState";
+import { Theme } from "../theme";
 import Avatar from "./Avatar";
 import Loading from "./Loading";
 import Spectrum from "./Spectrum";
@@ -38,39 +39,40 @@ import {
   PeopleListDiv,
 } from "./styling/PeopleComponents";
 
-const CallStateIcon = styled.span`
+const CallStateIcon = styled.span<{ theme: Theme }>`
   font-size: 10px;
   width: 14px;
   height: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #dc3545;
+  color: ${({ theme }) => theme.colors.callStateIcon};
   position: absolute;
   right: 0;
   background: white;
 `;
 
-const MutedIcon = styled(CallStateIcon)`
+const MutedIcon = styled(CallStateIcon)<{ theme: Theme }>`
   top: 0;
   border-bottom-left-radius: 6px;
-  border: 0.5px solid #0d6efd;
-  border-left: 0.5px solid #bbb;
-  border-bottom: 1px solid #bbb;
+  border: 0.5px solid ${({ theme }) => theme.colors.mutedIconBorder};
+  border-left: 0.5px solid ${({ theme }) => theme.colors.mutedIconBorder};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.mutedIconBorder};
+  color: ${({ theme }) => theme.colors.mutedIconText};
 `;
 
-const DeafenedIcon = styled(CallStateIcon)`
+const DeafenedIcon = styled(CallStateIcon)<{ theme: Theme }>`
   bottom: 0;
   border-top-left-radius: 6px;
-  border: 0.5px solid #0d6efd;
-  border-left: 0.5px solid #bbb;
-  border-top: 1px solid #bbb;
+  border: 0.5px solid ${({ theme }) => theme.colors.deafenedIconBorder};
+  border-left: 0.5px solid ${({ theme }) => theme.colors.deafenedIconBorder};
+  border-top: 1px solid ${({ theme }) => theme.colors.deafenedIconBorder};
   text-align: right;
-  color: black;
+  color: ${({ theme }) => theme.colors.mutedIconText};
   font-size: 9px;
 `;
 
-const RemoteMuteButton = styled.div`
+const RemoteMuteButton = styled.div<{ theme: Theme }>`
   position: absolute;
   inset: 0;
   font-size: 24px;
@@ -83,8 +85,9 @@ const RemoteMuteButton = styled.div`
   color: transparent;
 
   &:hover {
-    background-color: rgb(30 30 30 / 50%);
-    color: #ccc;
+    background-color: ${({ theme }) =>
+      theme.colors.remoteMuteButtonHoverBackground};
+    color: ${({ theme }) => theme.colors.remoteMuteButtonHoverText};
   }
 `;
 
@@ -216,7 +219,17 @@ type RemoteMuteConfirmModalHandle = {
 
 const RemoteMuteConfirmModal = React.forwardRef(
   (
-    { peerId, name }: { peerId: string; name: string },
+    {
+      peerId,
+      name,
+      isLocallyMuted,
+      onLocalMuteToggle,
+    }: {
+      peerId: string;
+      name: string;
+      isLocallyMuted: boolean;
+      onLocalMuteToggle: () => void;
+    },
     forwardedRef: React.Ref<RemoteMuteConfirmModalHandle>,
   ) => {
     const [visible, setVisible] = useState(true);
@@ -227,6 +240,7 @@ const RemoteMuteConfirmModal = React.forwardRef(
     const [disabled, setDisabled] = useState(false);
     const [error, setError] = useState<Error>();
     const clearError = useCallback(() => setError(undefined), []);
+    const [localMuteEnabled, setLocalMuteEnabled] = useState(isLocallyMuted);
 
     const mute = useCallback(() => {
       mediasoupRemoteMutePeer.call({ peerId }, (err) => {
@@ -240,32 +254,61 @@ const RemoteMuteConfirmModal = React.forwardRef(
       setDisabled(true);
     }, [peerId, hide]);
 
+    const handleLocalMuteToggle = useCallback(() => {
+      setLocalMuteEnabled(!localMuteEnabled); // Update modal's local state
+      onLocalMuteToggle(); // Call the callback to update PeerBox's state and track.enabled
+      hide();
+    }, [onLocalMuteToggle, localMuteEnabled]);
+
+    useEffect(() => {
+      setLocalMuteEnabled(isLocallyMuted); // Sync modal's local state with prop updates
+    }, [isLocallyMuted]);
+
     const modal = (
       <Modal show={visible} onHide={hide}>
         <Modal.Header closeButton>
-          <Modal.Title>Mute {name}</Modal.Title>
+          <Modal.Title>Manage audio for {name}</Modal.Title>{" "}
         </Modal.Header>
         <Modal.Body>
-          <p>
-            This will mute {name} for everyone on the call, not just you, and
-            should only be used as a last resort if (e.g.) they have forgotten
-            to mute themselves but aren&apos;t listening to the call.
-          </p>
+          <div>
+            <h4>Mute for me</h4>
+            <p>
+              Toggle hearing audio from {name} while you remain connected. This
+              will not affect what others hear and you can (un)mute them here
+              anytime.
+            </p>
+            <Button
+              variant={isLocallyMuted ? "primary" : "outline-primary"}
+              onClick={handleLocalMuteToggle}
+              className="mb-2"
+            >
+              {isLocallyMuted ? <>Unmute for me</> : <>Mute for me</>}
+            </Button>
+          </div>
+          <hr className="my-3" />
+          <div>
+            <h4>Mute for everyone</h4>
+            <p>
+              This will mute {name} for <strong>everyone</strong> on the call.
+              Use this only as a last resort if they are disruptive and cannot
+              mute themselves. Only they will be able to unmute themselves.
+            </p>
 
-          <p>Are you sure you want to mute {name}?</p>
+            <p>Are you sure you want to mute {name}?</p>
 
-          {error && (
-            <Alert variant="danger" dismissible onClose={clearError}>
-              {error.message}
-            </Alert>
-          )}
+            {error && (
+              <Alert variant="danger" dismissible onClose={clearError}>
+                {error.message}
+              </Alert>
+            )}
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={hide} disabled={disabled}>
             Cancel
           </Button>
           <Button variant="danger" onClick={mute} disabled={disabled}>
-            Mute
+            Mute for Everyone
           </Button>
         </Modal.Footer>
       </Modal>
@@ -324,6 +367,18 @@ const PeerBox = ({
 
   const { muted, deafened } = peer;
 
+  const [isLocalMuted, setIsLocalMuted] = useState(false);
+
+  const toggleLocalMute = useCallback(() => {
+    setIsLocalMuted(!isLocalMuted);
+  }, [isLocalMuted, stream]);
+
+  useEffect(() => {
+    if (audioRef.current && stream) {
+      audioRef.current.muted = isLocalMuted;
+    }
+  }, [isLocalMuted, audioRef, stream]);
+
   return (
     <>
       {renderMuteModal && (
@@ -331,6 +386,8 @@ const PeerBox = ({
           ref={muteModalRef}
           peerId={peer._id}
           name={name ?? "this user"}
+          isLocallyMuted={isLocalMuted}
+          onLocalMuteToggle={toggleLocalMute}
         />
       )}
       <OverlayTrigger
@@ -390,7 +447,7 @@ const PeerBox = ({
               </RemoteMuteButton>
             )}
           </div>
-          <audio autoPlay muted={selfDeafened} ref={audioRef} />
+          <audio autoPlay muted={selfDeafened || isLocalMuted} ref={audioRef} />
         </PeopleItemDiv>
       </OverlayTrigger>
     </>

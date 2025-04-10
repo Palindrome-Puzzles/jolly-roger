@@ -6,6 +6,7 @@ import type { ChatMessageContentType } from "../../lib/models/ChatMessages";
 import nodeIsMention from "../../lib/nodeIsMention";
 import { MentionSpan } from "./FancyEditor";
 import { shortCalendarTimeFormat } from "../../lib/calendarTimeFormat";
+import { Theme } from "../theme";
 
 // This file implements standalone rendering for the MessageElement format
 // defined by FancyEditor, for use in the chat pane.
@@ -26,14 +27,14 @@ const StyledBlockquote = styled.blockquote`
   margin-bottom: 0;
 `;
 
-const StyledCodeBlock = styled.code`
+const StyledCodeBlock = styled.code<{ theme: Theme }>`
   white-space: pre-wrap;
   display: block;
   border-radius: 4px;
   padding: 4px;
   width: 100%;
-  background-color: #eee;
-  color: black;
+  background-color: ${({ theme }) => theme.colors.codeBlockBackground};
+  color: ${({ theme }) => theme.colors.codeBlockText};
   margin-bottom: 0;
 `;
 
@@ -69,13 +70,18 @@ const MarkdownToken = ({ token }: { token: marked.Token }) => {
 
     // Truncate the link href
     let displayedHref = token.href;
-    const pathStart = token.href.indexOf('/', token.href.indexOf('//') + 2); // Find the start of the path
+    const pathStart = token.href.indexOf("/", token.href.indexOf("//") + 2); // Find the start of the path
     if (pathStart !== -1 && token.href.length - pathStart > 50) {
-      displayedHref = token.href.slice(0, pathStart + 10) + '... [truncated]';
+      displayedHref = token.href.slice(0, pathStart + 10) + "... [truncated]";
     }
 
     return (
-      <a target="_blank" rel="noopener noreferrer" title={`{children}`}href={token.href}>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        title={`{children}`}
+        href={token.href}
+      >
         {displayedHref} {/* Display the truncated href */}
       </a>
     );
@@ -127,7 +133,7 @@ const ChatMessage = ({
   message,
   displayNames,
   selfUserId,
-  timestamp
+  timestamp,
 }: {
   message: ChatMessageContentType;
   displayNames: Map<string, string>;
@@ -150,7 +156,16 @@ const ChatMessage = ({
     }
   });
 
-  return <div>{timestamp ? (<span>{shortCalendarTimeFormat(timestamp)}:<br/></span>) : null}{children}</div>;
+  return (
+    <div>
+      {timestamp ? (
+        <span>
+          {shortCalendarTimeFormat(timestamp)}:<br />
+        </span>
+      ) : null}
+      {children}
+    </div>
+  );
 };
 
 export default ChatMessage;

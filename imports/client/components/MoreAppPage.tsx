@@ -1,16 +1,20 @@
-import React, { useMemo } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import type { ChatMessageType } from "../../lib/models/ChatMessages";
-import type { PuzzleType } from "../../lib/models/Puzzles";
-import nodeIsMention from "../../lib/nodeIsMention";
-import FixedLayout from "./styling/FixedLayout";
-import { Alert } from "react-bootstrap";
-import { useBreadcrumb } from "../hooks/breadcrumb";
-import Markdown from "./Markdown";
 import { useTracker } from "meteor/react-meteor-data";
+import React, { useMemo } from "react";
+import { Alert } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import styled, { useTheme } from "styled-components";
+import type { ChatMessageType } from "../../lib/models/ChatMessages";
 import Hunts from "../../lib/models/Hunts";
+import type { PuzzleType } from "../../lib/models/Puzzles";
+import Puzzles from "../../lib/models/Puzzles";
+import Tags from "../../lib/models/Tags";
+import nodeIsMention from "../../lib/nodeIsMention";
+import puzzlesForPuzzleList from "../../lib/publications/puzzlesForPuzzleList";
+import { useBreadcrumb } from "../hooks/breadcrumb";
+import useTypedSubscribe from "../hooks/useTypedSubscribe";
+import Markdown from "./Markdown";
+import FixedLayout from "./styling/FixedLayout";
 
 const FirehosePageLayout = styled.div`
   padding: 8px 15px;
@@ -57,6 +61,27 @@ const MoreAppPage = () => {
 
   useBreadcrumb({ title: "More", path: `/hunts/${huntId}/more` });
 
+  const puzzlesLoading = useTypedSubscribe(puzzlesForPuzzleList, {
+    huntId,
+    includeDeleted: false,
+  });
+
+  const loading = puzzlesLoading();
+
+  const administriviaTag = useTracker(() => {
+    if (!huntId || loading) {
+      return null;
+    }
+    return Tags.findOne({ hunt: huntId, name: "administrivia" });
+  }, [huntId, loading]);
+
+  const administriviaPuzzles = useTracker(() => {
+    if (!huntId || !administriviaTag || loading) {
+      return null;
+    }
+    return Puzzles.find({ hunt: huntId, tags: administriviaTag._id }).fetch();
+  }, [huntId, loading, administriviaTag]);
+
   const jr_host = window.location.host;
   const protocol = window.location.protocol;
   const bookmarklet = useMemo(() => {
@@ -74,6 +99,8 @@ const MoreAppPage = () => {
     () => (huntId ? Hunts.findOne(huntId) : null),
     [huntId],
   );
+
+  const theme = useTheme();
 
   return (
     <FixedLayout>
@@ -95,7 +122,7 @@ const MoreAppPage = () => {
               padding: ".5rem .8rem",
               fontSize: "1.2rem",
               boxShadow: "1px",
-              background: "#eee",
+              background: theme.colors.background,
             }}
             href={bookmarklet}
           >
@@ -117,10 +144,10 @@ const MoreAppPage = () => {
           </li>
         </ul>
 
-        {/* 
+        {/*
         <Alert variant="warning">
         Note: You'll need a new/different version of this for each hunt.
-        </Alert> 
+        </Alert>
         */}
 
         <hr />
@@ -133,7 +160,7 @@ const MoreAppPage = () => {
               padding: ".5rem .8rem",
               fontSize: "1.2rem",
               boxShadow: "1px",
-              background: "#eee",
+              background: theme.colors.background,
             }}
             href={`/hunts/${huntId}/notes`}
           >

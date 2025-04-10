@@ -1,14 +1,16 @@
 import { Meteor } from "meteor/meteor";
 import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { ServiceConfiguration } from "meteor/service-configuration";
+import { faCog } from "@fortawesome/free-solid-svg-icons/faCog";
+import { faComment } from "@fortawesome/free-solid-svg-icons/faComment";
 import { faCopy } from "@fortawesome/free-solid-svg-icons/faCopy";
+import { faKey } from "@fortawesome/free-solid-svg-icons/faKey";
 import { faPuzzlePiece } from "@fortawesome/free-solid-svg-icons/faPuzzlePiece";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
-import { faKey } from "@fortawesome/free-solid-svg-icons/faKey";
-import { faComment } from "@fortawesome/free-solid-svg-icons/faComment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
+import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Toast from "react-bootstrap/Toast";
@@ -17,7 +19,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { Link } from "react-router-dom";
 import ReactTextareaAutosize from "react-textarea-autosize";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import Flags from "../../Flags";
 import { calendarTimeFormat } from "../../lib/calendarTimeFormat";
 import isAdmin from "../../lib/isAdmin";
@@ -26,6 +28,7 @@ import Announcements from "../../lib/models/Announcements";
 import type { AnnouncementType } from "../../lib/models/Announcements";
 import type { BookmarkNotificationType } from "../../lib/models/BookmarkNotifications";
 import BookmarkNotifications from "../../lib/models/BookmarkNotifications";
+import bookmarkPuzzle from "../../methods/bookmarkPuzzle";
 import type { ChatNotificationType } from "../../lib/models/ChatNotifications";
 import ChatNotifications from "../../lib/models/ChatNotifications";
 import Guesses from "../../lib/models/Guesses";
@@ -50,7 +53,10 @@ import dismissPuzzleNotification from "../../methods/dismissPuzzleNotification";
 import setGuessState from "../../methods/setGuessState";
 import { guessURL } from "../../model-helpers";
 import GoogleScriptInfo from "../GoogleScriptInfo";
-import { useOperatorActionsHidden } from "../hooks/persisted-state";
+import {
+  useOperatorActionsHidden,
+  useOperatorActionsHiddenForHunt,
+} from "../hooks/persisted-state";
 import { useBlockReasons } from "../hooks/useBlockUpdate";
 import useTypedSubscribe from "../hooks/useTypedSubscribe";
 import indexedDisplayNames from "../indexedDisplayNames";
@@ -278,6 +284,20 @@ const GuessMessage = React.memo(
       confidenceVariant = "warning";
     }
 
+    const [showSettings, setShowSettings] = useState(false);
+    const toggleSettings = () => {
+      setShowSettings(!showSettings);
+    };
+
+    const [operatorActionsHidden, setOperatorActionsHidden] =
+      useOperatorActionsHiddenForHunt(guess.hunt);
+
+    const hideOperatorActionsForHunt = function () {
+      setOperatorActionsHidden(true);
+    };
+
+    const theme = useTheme();
+
     return (
       <Toast onClose={dismissGuess}>
         <Toast.Header>
@@ -287,7 +307,7 @@ const GuessMessage = React.memo(
             <a href={linkTarget} target="_blank" rel="noopener noreferrer">
               {puzzle.title}
             </a>{" "}
-            {/* 
+            {/*
             from{" "}
             <a
               href={`/users/${guess.createdBy}`}
@@ -310,6 +330,25 @@ const GuessMessage = React.memo(
               endTime={guess.updatedAt.getTime() + LINGER_PERIOD}
             />
           )}
+          <Dropdown className="ms-auto" onToggle={toggleSettings}>
+            <Dropdown.Toggle
+              variant={theme.basicMode}
+              size="sm"
+              as={Button}
+              id={`guess-settings-${guess._id}`}
+            >
+              <FontAwesomeIcon icon={faCog} />
+            </Dropdown.Toggle>
+            <Dropdown.Menu align="end">
+              <Dropdown.Item
+                onClick={() => {
+                  hideOperatorActionsForHunt();
+                }}
+              >
+                Disable guess notifications for this hunt
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Toast.Header>
         <Toast.Body>
           <StyledNotificationRow
@@ -621,6 +660,12 @@ const ChatNotificationMessage = ({
   );
 
   const senderDisplayName = displayNames.get(cn.sender) ?? "???";
+  const [showSettings, setShowSettings] = useState(false);
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
+
+  const theme = useTheme();
 
   return (
     <Toast className="bg-info-subtle" onClose={dismiss}>
@@ -636,6 +681,21 @@ const ChatNotificationMessage = ({
         <StyledNotificationTimestamp>
           {calendarTimeFormat(cn.createdAt)}
         </StyledNotificationTimestamp>
+        <Dropdown className="ms-auto" onToggle={toggleSettings}>
+          <Dropdown.Toggle
+            variant={theme.basicMode}
+            size="sm"
+            as={Button}
+            id={`chat-settings-${cn._id}`}
+          >
+            <FontAwesomeIcon icon={faCog} />
+          </Dropdown.Toggle>
+          <Dropdown.Menu align="end">
+            <Dropdown.Item as={Link} to="/users/me">
+              Edit Dingwords
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </Toast.Header>
       <Toast.Body>
         <div>
@@ -678,6 +738,20 @@ const BookmarkNotificationMessage = ({
       break;
   }
 
+  const [showSettings, setShowSettings] = useState(false);
+
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
+
+  const puzzleId = puzzle._id;
+
+  const disableBookmark = async function () {
+    await bookmarkPuzzle.callPromise({ puzzleId, bookmark: false });
+  };
+
+  const theme = useTheme();
+
   return (
     <Toast onClose={dismiss}>
       <Toast.Header>
@@ -687,6 +761,25 @@ const BookmarkNotificationMessage = ({
           </Link>{" "}
           {describeState}
         </strong>
+        <Dropdown className="ms-auto" onToggle={toggleSettings}>
+          <Dropdown.Toggle
+            variant={theme.basicMode}
+            size="sm"
+            as={Button}
+            id={`bookmark-settings-${puzzleId}`}
+          >
+            <FontAwesomeIcon icon={faCog} />
+          </Dropdown.Toggle>
+          <Dropdown.Menu align="end">
+            <Dropdown.Item
+              onClick={() => {
+                disableBookmark();
+              }}
+            >
+              Unbookmark this puzzle
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </Toast.Header>
       <Toast.Body>
         <div>
