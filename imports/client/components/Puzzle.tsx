@@ -531,21 +531,16 @@ const Puzzle = React.memo(
         <Tooltip id={`solvers-tooltip-${puzzleId}`}>
           {showRtc && (
             <div style={{ textAlign: "left" }}>
-              <FontAwesomeIcon icon={faPhone} fixedWidth />{" "}
+              <strong>Callers:</strong>
               {rtcUsers.map((u) => u.displayName).join(", ")}
             </div>
           )}
-          {showActive && (
+          {(showActive || showPassive) && (
             <div style={{ textAlign: "left" }}>
-              <FontAwesomeIcon icon={faEye} fixedWidth />{" "}
-              {activeUsers.map((u) => u.displayName).join(", ")}
-            </div>
-          )}
-          {showPassive && (
-            <div
-              style={{ textAlign: "left", fontStyle: "italic", opacity: 0.8 }}
-            >
-              {passiveUsers.map((u) => u.displayName).join(", ")}
+              <strong>Viewers:</strong>
+              {[...activeUsers, ...passiveUsers]
+                .map((u) => u.displayName)
+                .join(", ")}
             </div>
           )}
         </Tooltip>
@@ -611,7 +606,20 @@ const Puzzle = React.memo(
         <PuzzleMetaColumn>{puzzleIsMeta}</PuzzleMetaColumn>
         <SolversColumn>
           {showSolvers !== "hide" && solvedness === "unsolved" ? (
-            <OverlayTrigger placement="top" overlay={solversTooltip}>
+            <OverlayTrigger
+              placement="top-start"
+              overlay={solversTooltip}
+              popperConfig={{
+                modifiers: [
+                  {
+                    name: "offset",
+                    options: {
+                      offset: [-15, 5],
+                    },
+                  },
+                ],
+              }}
+            >
               <div style={{ cursor: "default" }}>
                 {rtcUsers.length > 0 && (
                   <SolverRow>
