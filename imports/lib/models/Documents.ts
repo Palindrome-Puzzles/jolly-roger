@@ -5,7 +5,16 @@ import SoftDeletedModel from "./SoftDeletedModel";
 import withCommon from "./withCommon";
 import { GoogleDocumentValueSchema } from "./GoogleDocSchema";
 
-export const DOCUMENT_TYPES = ["spreadsheet", "document", "drawing"];
+// 1. Add "whiteboard" to the list of allowed document types
+export const DOCUMENT_TYPES = ["spreadsheet", "document", "drawing", "whiteboard"];
+
+// 2. Define the schema for the tldraw value
+// We mainly just need the 'id' (the room ID) to construct the URL.
+const TldrawDocumentValueSchema = z.object({
+  id: z.string().min(1),
+  type: z.literal("whiteboard"),
+  markedPrimaryTs: z.date().optional(),
+});
 
 const DocumentSchema = withCommon(
   z
@@ -18,6 +27,10 @@ const DocumentSchema = withCommon(
         z.object({
           provider: z.literal("google"),
           value: GoogleDocumentValueSchema,
+        }),
+        z.object({
+          provider: z.literal("tldraw"),
+          value: TldrawDocumentValueSchema,
         }),
       ]),
     ),
