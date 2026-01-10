@@ -31,8 +31,10 @@ import FormControl from "react-bootstrap/FormControl";
 import FormGroup from "react-bootstrap/FormGroup";
 import FormLabel from "react-bootstrap/FormLabel";
 import InputGroup from "react-bootstrap/InputGroup";
+import Overlay from "react-bootstrap/Overlay";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
+import Tooltip from "react-bootstrap/Tooltip";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components";
 import isAdmin from "../../lib/isAdmin";
@@ -564,13 +566,6 @@ const PuzzleListView = ({
           puzzles
         </Alert>
       );
-      const singleMatchMessage = isSearchFocused &&
-        retainedPuzzles.length === 1 && (
-          <Alert variant="info">
-            Press <kbd>Enter</kbd> to go to{" "}
-            <strong>{retainedPuzzles[0].title}</strong>
-          </Alert>
-        );
       const retainedIds = new Set(retainedPuzzles.map((puzzle) => puzzle._id));
       const filterMessage = `Showing ${retainedPuzzles.length} of ${allPuzzlesCount} rows`;
 
@@ -652,7 +647,6 @@ const PuzzleListView = ({
       return (
         <div>
           {maybeMatchWarning}
-          {singleMatchMessage}
           <PuzzleListToolbar>
             <div>{listControls}</div>
             <div>{filterMessage}</div>
@@ -716,7 +710,6 @@ const PuzzleListView = ({
       showAddModalWithTags,
       canExpandAllGroups,
       expandAllGroups,
-      isSearchFocused,
     ],
   );
 
@@ -906,6 +899,18 @@ const PuzzleListView = ({
               <FontAwesomeIcon icon={faEraser} content="erase-filter" />
             </Button>
           </InputGroup>
+          <Overlay
+            target={searchBarRef.current}
+            show={isSearchFocused && retainedPuzzles.length === 1}
+            placement="bottom-start"
+          >
+            {(props) => (
+              <Tooltip id={`${idPrefix}-single-match-tooltip`} {...props}>
+                Press <kbd>Enter</kbd> to go to{" "}
+                <strong>{retainedPuzzles[0]?.title}</strong>
+              </Tooltip>
+            )}
+          </Overlay>
         </SearchFormGroup>
       </ViewControls>
       {renderList(
