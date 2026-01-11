@@ -1,5 +1,6 @@
 import type { Meteor } from "meteor/meteor";
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { faChalkboard } from "@fortawesome/free-solid-svg-icons/faChalkboard";
 import { faCopy } from "@fortawesome/free-solid-svg-icons/faCopy";
 import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
 import { faFilePen } from "@fortawesome/free-solid-svg-icons/faFilePen";
@@ -16,6 +17,13 @@ interface DocumentDisplayProps {
   user: Meteor.User;
   isShown: boolean;
 }
+
+export const DocumentTypeIcons = {
+  spreadsheet: faTable,
+  whiteboard: faChalkboard,
+  document: faFileAlt,
+  drawing: faFilePen,
+};
 
 const StyledDeepLink = styled.a`
   display: inline-block;
@@ -123,6 +131,53 @@ const GoogleDocumentDisplay = ({
   }
 };
 
+const TldrawDocumentDisplay = ({
+  document,
+  displayMode,
+  isShown,
+}: DocumentDisplayProps) => {
+  // We assume the stored ID is the room ID (e.g. "my_room_123")
+  const url = `https://www.tldraw.com/r/${document.value.id}`;
+  const title = "Whiteboard";
+  const icon = faChalkboard;
+
+  switch (displayMode) {
+    case "copy":
+      return (
+        <CopyToClipboardButton
+          variant="link"
+          tooltipText="Copy whiteboard link"
+          tooltipPlacement="right"
+          text={url}
+          size="sm"
+        >
+          <span>{title}</span> <FontAwesomeIcon fixedWidth icon={faCopy} />
+        </CopyToClipboardButton>
+      );
+    case "link":
+      return (
+        <StyledDeepLink href={url} target="_blank" rel="noreferrer noopener">
+          <FontAwesomeIcon fixedWidth icon={icon} /> <span>{title}</span>
+        </StyledDeepLink>
+      );
+    case "embed":
+      return (
+        <StyledIframe
+          title="whiteboard"
+          scrolling="no"
+          src={url}
+          $isShown={isShown}
+          // Critical for tldraw functionality (pasting images, using clipboard)
+          allow="clipboard-read; clipboard-write"
+        />
+      );
+    default:
+      return (
+        <DocumentMessage>Unknown displayMode {displayMode}</DocumentMessage>
+      );
+  }
+};
+
 const DocumentDisplay = ({
   document,
   displayMode,
@@ -136,6 +191,14 @@ const DocumentDisplay = ({
           document={document}
           displayMode={displayMode}
           user={user}
+          isShown={isShown}
+        />
+      );
+    case "tldraw":
+      return (
+        <TldrawDocumentDisplay
+          document={document}
+          displayMode={displayMode}
           isShown={isShown}
         />
       );

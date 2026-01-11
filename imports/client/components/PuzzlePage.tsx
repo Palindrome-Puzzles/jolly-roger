@@ -3,6 +3,7 @@ import { Random } from "meteor/random";
 import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { faAngleDoubleDown } from "@fortawesome/free-solid-svg-icons/faAngleDoubleDown";
 import { faAngleDoubleUp } from "@fortawesome/free-solid-svg-icons/faAngleDoubleUp";
+import { faChalkboard } from "@fortawesome/free-solid-svg-icons/faChalkboard";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons/faChevronLeft";
 import { faComments } from "@fortawesome/free-solid-svg-icons/faComments";
 import { faCopy } from "@fortawesome/free-solid-svg-icons/faCopy";
@@ -16,6 +17,7 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons/faPaperPlane";
 import { faPuzzlePiece } from "@fortawesome/free-solid-svg-icons/faPuzzlePiece";
 import { faReply } from "@fortawesome/free-solid-svg-icons/faReply";
 import { faReplyAll } from "@fortawesome/free-solid-svg-icons/faReplyAll";
+import { faTable } from "@fortawesome/free-solid-svg-icons/faTable";
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
@@ -34,9 +36,11 @@ import React, {
 import Alert from "react-bootstrap/Alert";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Col from "react-bootstrap/Col";
 import type { FormControlProps } from "react-bootstrap/FormControl";
 import FormControl from "react-bootstrap/FormControl";
+import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
 import FormLabel from "react-bootstrap/FormLabel";
 import FormText from "react-bootstrap/FormText";
@@ -90,6 +94,7 @@ import chatMessagesForPuzzle from "../../lib/publications/chatMessagesForPuzzle"
 import puzzleForPuzzlePage from "../../lib/publications/puzzleForPuzzlePage";
 import puzzlesForHunt from "../../lib/publications/puzzlesForHunt";
 import { computeSolvedness } from "../../lib/solvedness";
+import addPuzzleDocument from "../../methods/addPuzzleDocument";
 import addPuzzleAnswer from "../../methods/addPuzzleAnswer";
 import addPuzzleTag from "../../methods/addPuzzleTag";
 import createChatImageUpload from "../../methods/createChatImageUpload";
@@ -139,6 +144,7 @@ import { MonospaceFontFamily } from "./styling/constants";
 import FixedLayout from "./styling/FixedLayout";
 import { mediaBreakpointDown } from "./styling/responsive";
 import TagList from "./TagList";
+import { DocumentTypeIcons } from "./DocumentDisplay";
 
 // Shows a state dump as an in-page overlay when enabled.
 const DEBUG_SHOW_CALL_STATE = false;
@@ -2154,6 +2160,126 @@ const ChatSection = React.forwardRef(
 const ChatSectionMemo = React.memo(ChatSection);
 const AttachmentsMemo = React.memo(AttachmentsSection);
 
+const AddWhiteboardModal = ({
+  show,
+  onHide,
+  puzzleId,
+}: {
+  show: boolean;
+  onHide: () => void;
+  puzzleId: string;
+}) => {
+  const [url, setUrl] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = useCallback(() => {
+    // Basic validation to ensure it's a tldraw link
+    if (!url.includes("tldraw.com/f/")) {
+      setError("That doesn't look like a valid tldraw room URL.");
+      return;
+    }
+
+    const roomId = url.split("/f/")[1]?.split("?")[0];
+    if (!roomId) {
+      setError("Could not parse Room ID from URL.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    // We assume a server method exists to create the document
+    addPuzzleDocument.call({ puzzleId, roomId }, (error) => {
+      setIsSubmitting(false);
+      if (error) {
+        setError(error.message);
+      } else {
+        onHide();
+      }
+    });
+  }, [url, puzzleId, onHide]);
+
+  return (
+    <Modal show={show} onHide={onHide}>
+      <Modal.Header closeButton>
+        <Modal.Title>Add Whiteboard</Modal.Title>
+      </Modal.Header>
+      <Form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <Modal.Body>
+          <Alert variant="info">
+            <p>
+              <strong>Whiteboard support is still a work in progress!</strong>
+            </p>
+
+            <p>
+              You'll need to do some manual steps to add a whiteboard to this
+              puzzle.
+            </p>
+          </Alert>
+          <p>To add a collaborative whiteboard to this puzzle:</p>
+          <ol>
+            <li>
+              Open{" "}
+              <a
+                href="https://www.tldraw.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                tldraw.com
+              </a>{" "}
+              in a new tab.
+            </li>
+            <li>It will automatically create a new room for you.</li>
+            <li>
+              Sign in to your tldraw account if you haven't already, to be able
+              to share.
+            </li>
+            <li>
+              <strong>Copy the URL</strong> from your browser's address bar.
+            </li>
+            <li>Paste the URL below.</li>
+          </ol>
+
+          <FormGroup className="mb-3">
+            <FormLabel>Whiteboard URL</FormLabel>
+            <FormControl
+              type="text"
+              placeholder="https://www.tldraw.com/r/..."
+              value={url}
+              onChange={(e) => {
+                setUrl(e.target.value);
+                setError(null);
+              }}
+              autoFocus
+            />
+          </FormGroup>
+
+          {error && <Alert variant="danger">{error}</Alert>}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={onHide}>
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleSubmit}
+            type="submit"
+            disabled={isSubmitting || !url}
+          >
+            {isSubmitting ? "Adding..." : "Add Whiteboard"}
+          </Button>
+        </Modal.Footer>
+      </Form>
+    </Modal>
+  );
+};
+
 const PuzzlePageMetadata = ({
   isMinimized,
   puzzle,
@@ -2164,6 +2290,9 @@ const PuzzlePageMetadata = ({
   isDesktop,
   selfUser,
   toggleMetadataMinimize,
+  allDocs,
+  selectedDocumentIndex,
+  setSelectedDocumentIndex,
 }: {
   isMinimized: boolean;
   puzzle: PuzzleType;
@@ -2175,6 +2304,8 @@ const PuzzlePageMetadata = ({
   selfUser: Meteor.User;
   toggleMetadataMinimize: () => void;
   allDocs: DocumentType[] | undefined;
+  selectedDocumentIndex: number;
+  setSelectedDocumentIndex: (index: number) => void;
 }) => {
   const huntId = puzzle.hunt;
   const puzzleId = puzzle._id;
@@ -2205,6 +2336,21 @@ const PuzzlePageMetadata = ({
     },
     [puzzleId],
   );
+  const [showWhiteboardModal, setShowWhiteboardModal] = useState(false);
+  const hasWhiteboard = useMemo(() => {
+    return allDocs?.some((d) => d.provider === "tldraw");
+  }, [allDocs]);
+  const addWhiteboardButton =
+    canUpdate && !hasWhiteboard ? (
+      <Button
+        onClick={() => setShowWhiteboardModal(true)}
+        variant="secondary"
+        size="sm"
+        title="Add a whiteboard"
+      >
+        <FontAwesomeIcon icon={faChalkboard} /> Add Board
+      </Button>
+    ) : null;
 
   const onRemoveTag = useCallback(
     (tagId: string) => {
@@ -2293,6 +2439,41 @@ const PuzzlePageMetadata = ({
     document.value.type === "spreadsheet" && (
       <InsertImage documentId={document._id} />
     );
+
+  const documentControl = useMemo(() => {
+    if (!allDocs || allDocs.length === 0) return null;
+
+    // If only 1 document, show the standard link display
+    if (allDocs.length === 1) {
+      return null;
+    }
+
+    // If multiple documents, show a button group switcher
+    return (
+      <ButtonGroup size="sm" className="me-2">
+        {allDocs.map((doc, index) => {
+          const isSelected = index === selectedDocumentIndex;
+          const icon = DocumentTypeIcons[doc.value.type];
+
+          return (
+            <Button
+              key={doc._id}
+              variant={isSelected ? "primary" : "outline-secondary"}
+              onClick={() => {
+                console.log(index);
+                setSelectedDocumentIndex(index);
+              }}
+              title={
+                isSelected ? "Current view" : `Switch to ${doc.value.type}`
+              }
+            >
+              <FontAwesomeIcon icon={icon} />
+            </Button>
+          );
+        })}
+      </ButtonGroup>
+    );
+  }, [allDocs, selectedDocumentIndex, setSelectedDocumentIndex]);
 
   const documentLink = document ? (
     <span>
@@ -2430,6 +2611,11 @@ const PuzzlePageMetadata = ({
           tags={allTags}
           onSubmit={onEdit}
         />
+        <AddWhiteboardModal
+          show={showWhiteboardModal}
+          onHide={() => setShowWhiteboardModal(false)}
+          puzzleId={puzzleId}
+        />
         <PuzzleMetadataActionRow ref={actionRowRef}>
           <BookmarkButton
             puzzleId={puzzleId}
@@ -2442,6 +2628,8 @@ const PuzzlePageMetadata = ({
           {!tagsOnSeparateRow && tagListElement}{" "}
           {/* Render tags inline if they fit */}
           <PuzzleMetadataButtons ref={actionButtonsRef}>
+            {documentControl}
+            {addWhiteboardButton}
             {editButton}
             {imageInsert}
             {guessButton}
@@ -3595,7 +3783,7 @@ const PuzzlePage = React.memo(() => {
         ? undefined
         : Documents.find(
             { puzzle: puzzleId },
-            { sort: { createdAt: 1 } },
+            { sort: { markedPrimaryTs: 1, createdAt: 1 } },
           ).fetch(),
     [puzzleDataLoading, puzzleId],
   );
@@ -3813,9 +4001,7 @@ const PuzzlePage = React.memo(() => {
       toggleMetadataMinimize={toggleMetadata}
       allDocs={allDocs}
       selectedDocumentIndex={selectedDocumentIndex}
-      setSelectedDocument={setSelectedDocumentIndex}
-      selectedSecondaryDocument={secondaryDocumentIndex}
-      setSecondaryDocument={setSecondaryDocumentIndex}
+      setSelectedDocumentIndex={setSelectedDocumentIndex}
       splitDirection={splitDirection}
       setSplitDirection={setSplitDirection}
       selfUser={selfUser}

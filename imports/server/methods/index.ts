@@ -2,6 +2,7 @@ import "./acceptHuntInvitationCode";
 import "./acceptUserHuntTerms";
 import "./addHuntUser";
 import "./addPuzzleAnswer";
+import "./addPuzzleDocument";
 import "./addPuzzleTag";
 import "./bookmarkPuzzle";
 import "./bulkAddHuntUsers";
