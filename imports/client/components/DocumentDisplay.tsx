@@ -167,6 +167,8 @@ const TldrawDocumentDisplay = ({
           scrolling="no"
           src={url}
           $isShown={isShown}
+          // speculative fix for tldraw popup
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-storage-access-by-user-activation"
           // Critical for tldraw functionality (pasting images, using clipboard)
           allow="clipboard-read; clipboard-write"
         />

@@ -2455,12 +2455,46 @@ const PuzzlePageMetadata = ({
           const isSelected = index === selectedDocumentIndex;
           const icon = DocumentTypeIcons[doc.value.type];
 
+          // At the moment, only tldraw whiteboards are supported
+
+          if (
+            doc.provider === "tldraw" &&
+            doc.value.type === "whiteboard" &&
+            !isSelected
+          ) {
+            return (
+              <OverlayTrigger
+                key={doc._id}
+                placement="bottom"
+                overlay={
+                  <Tooltip id={`document-${doc._id}-tooltip`}>
+                    Switch to a tldraw whiteboard. Note: this will display a
+                    message saying that it is read-only - you can dismiss this
+                    and continue to edit.
+                  </Tooltip>
+                }
+              >
+                <Button
+                  key={doc._id}
+                  variant={isSelected ? "primary" : "outline-secondary"}
+                  onClick={() => {
+                    setSelectedDocumentIndex(index);
+                  }}
+                  title={
+                    isSelected ? "Current view" : `Switch to ${doc.value.type}`
+                  }
+                >
+                  <FontAwesomeIcon icon={icon} />
+                </Button>
+              </OverlayTrigger>
+            );
+          }
+
           return (
             <Button
               key={doc._id}
               variant={isSelected ? "primary" : "outline-secondary"}
               onClick={() => {
-                console.log(index);
                 setSelectedDocumentIndex(index);
               }}
               title={
@@ -2599,6 +2633,8 @@ const PuzzlePageMetadata = ({
       </Button>
     </OverlayTrigger>
   );
+
+  console.log("canUpdate", canUpdate, "hasWhiteboard", hasWhiteboard);
 
   return !isMinimized ? (
     <div>
