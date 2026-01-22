@@ -122,6 +122,29 @@ export const useHuntPuzzleListShowSolved = (huntId: string) => {
   ] as const;
 };
 
+export const useHuntPuzzleListShowSolvers = (huntId: string) => {
+  const [huntPuzzleListView, setHuntPuzzleListView] =
+    useHuntPuzzleListState(huntId);
+  return [
+    huntPuzzleListView.showSolvers,
+    useCallback(
+      (update: SetStateAction<"hide" | "viewing">) => {
+        setHuntPuzzleListView((prevView) => {
+          const newView = {
+            ...prevView,
+            showSolvers:
+              typeof update === "function"
+                ? update(prevView.showSolvers)
+                : update,
+          };
+          return newView;
+        });
+      },
+      [setHuntPuzzleListView],
+    ),
+  ] as const;
+};
+
 export const useHuntPuzzleListCollapseGroups = (huntId: string) => {
   const [huntPuzzleListView, setHuntPuzzleListView] =
     useHuntPuzzleListState(huntId);

@@ -19,17 +19,34 @@ export interface Theme {
     remoteMuteButtonHoverBackground: string;
     remoteMuteButtonHoverText: string;
     chatterSectionBackground: string;
+    firehosePreWrapBackground: string;
+    firehosePreWrapText: string;
     codeBlockBackground: string;
     codeBlockText: string;
     mentionSpanBackground: string;
     mentionSpanText: string;
-    selfMentionSpanBackground: string;
-    selfMentionSpanText: string;
     selectedMentionSpanShadow: string;
+    selectedMentionSpanBackground: string;
+    selectedMentionSpanText: string;
     autocompleteBackground: string;
     autocompleteShadow: string;
     matchCandidateSelectedBackground: string;
     documentMessageBackground: string;
+    guessColorCorrectBackground: string;
+    guessColorCorrectIcon: string;
+    guessColorIntermediateBackground: string;
+    guessColorIntermediateIcon: string;
+    guessColorIncorrectBackground: string;
+    guessColorIncorrectIcon: string;
+    guessColorRejectedBackground: string;
+    guessColorRejectedIcon: string;
+    guessColorPendingBackground: string;
+    guessColorPendingIcon: string;
+    guessColorCorrectHoverBackground: string;
+    guessColorIntermediateHoverBackground: string;
+    guessColorIncorrectHoverBackground: string;
+    guessColorRejectedHoverBackground: string;
+    guessColorPendingHoverBackground: string;
     avatarInitialText: string;
     avatarInitialBackground: string;
     avatarSelfBorder: string;
@@ -39,14 +56,16 @@ export interface Theme {
     announcementToastBackground: string;
     announcementToastText: string;
     announcementToastBorder: string;
+    replyChatMessageBackground: string;
     hoverChatMessageBackground: string;
     systemChatMessageBackground: string;
     pinnedChatMessageBackground: string;
+    replyButtonText: string;
+    hoverReplyButtonText: string;
+    replyingToBackground: string;
     fancyEditorBackground: string;
+    puzzleMetadataBackground: string;
     navBarBottomBorder: string;
-    navBarBackground: string;
-    setupPageHeaderBackground: string;
-    setupPageCircuitBreakerHeaderBackground: string;
     jumbotronBackground: string;
     guess: {
       correct: {
@@ -80,6 +99,7 @@ export interface Theme {
       unsolved: string;
       solved: string;
     };
+    contributionsGraph: string[];
   };
   reactSelectTheme: ThemeConfig;
 }
@@ -89,28 +109,49 @@ export const lightTheme: Theme = {
   colors: {
     background: "var(--bs-body-bg)",
     text: "var(--bs-body-color)",
-    border: "var(--bs-border-color)",
     primary: "var(--bs-primary)",
     secondary: "var(--bs-secondary)",
+    muted: "#6c757d",
+    danger: "var(--bs-danger)",
+    warning: "var(--bs-warning)",
+    info: "var(--bs-info)",
+    success: "var(--bs-success)",
     callStateIcon: "#dc3545",
     mutedIconBorder: "#0d6efd",
     deafenedIconBorder: "#0d6efd",
-    mutedIconText: "red",
-    localMutedIconText: "black",
+    mutedIconText: "black",
+    deafenedIconText: "black",
     remoteMuteButtonHoverBackground: "rgb(30 30 30 / 50%)",
     remoteMuteButtonHoverText: "#ccc",
     chatterSectionBackground: "#f3e5e5",
+    firehosePreWrapBackground: "transparent",
+    firehosePreWrapText: "black",
     codeBlockBackground: "#eee",
     codeBlockText: "black",
-    mentionSpanBackground: "#eef",
-    mentionSpanText: "inherit",
-    selfMentionSpanBackground: "#ced0ed",
-    selfMentionSpanText: "#4649ef",
+    mentionSpanBackground: "#ced0ed",
+    mentionSpanText: "#4649ef",
     selectedMentionSpanShadow: "#b4d5ff",
+    selectedMentionSpanBackground: "#ced0ed",
+    selectedMentionSpanText: "#4649ef",
     autocompleteBackground: "white",
     autocompleteShadow: "0 1px 5px rgb(0 0 0 / 20%)",
     matchCandidateSelectedBackground: "#e0ecfc",
     documentMessageBackground: "#ddf",
+    guessColorCorrectBackground: "#d4edda",
+    guessColorCorrectIcon: "#155724",
+    guessColorIntermediateBackground: "#fff3cd",
+    guessColorIntermediateIcon: "#856404",
+    guessColorIncorrectBackground: "#f8d7da",
+    guessColorIncorrectIcon: "#721c24",
+    guessColorRejectedBackground: "#e2e3e5",
+    guessColorRejectedIcon: "#383d41",
+    guessColorPendingBackground: "#fff",
+    guessColorPendingIcon: "#000",
+    guessColorCorrectHoverBackground: "#c3e6cb",
+    guessColorIntermediateHoverBackground: "#ffeeba",
+    guessColorIncorrectHoverBackground: "#f1c0c5",
+    guessColorRejectedHoverBackground: "#d1d2d3",
+    guessColorPendingHoverBackground: "#eee",
     avatarInitialText: "#ffffff",
     avatarInitialBackground: "#000000",
     avatarSelfBorder: "#0D6EFD",
@@ -120,14 +161,16 @@ export const lightTheme: Theme = {
     announcementToastBackground: "white",
     announcementToastText: "black",
     announcementToastBorder: "rgba(0, 0, 0, 0.1)",
+    replyChatMessageBackground: "#e0f0ff",
     hoverChatMessageBackground: "#f0f0f0",
     systemChatMessageBackground: "#e0e0e0",
     pinnedChatMessageBackground: "#ffff70",
+    replyButtonText: "#666",
+    hoverReplyButtonText: "#000",
+    replyingToBackground: "#eee",
     fancyEditorBackground: "#eee",
+    puzzleMetadataBackground: "white",
     navBarBottomBorder: "#6c757d",
-    navBarBackground: "#f0f0f0",
-    setupPageHeaderBackground: "#f0f0f0",
-    setupPageCircuitBreakerHeaderBackground: "#eef",
     jumbotronBackground: "#e9ecef",
     guess: {
       correct: {
@@ -161,6 +204,7 @@ export const lightTheme: Theme = {
       unsolved: "#f0f0f0",
       solved: "#dfffdf",
     },
+    contributionsGraph: ["#ebedf0", "#c6e48b", "#7bc96f", "#239a3b", "#196127"],
   },
   reactSelectTheme: {
     borderRadius: 4,
@@ -198,28 +242,49 @@ export const darkTheme: Theme = {
   colors: {
     background: "var(--bs-dark-bg-subtle)",
     text: "var(--bs-body-color)",
-    border: "var(--bs-border-color)",
     primary: "var(--bs-primary)",
     secondary: "var(--bs-secondary)",
+    muted: "#6c757d",
+    danger: "var(--bs-danger)",
+    warning: "var(--bs-warning)",
+    info: "var(--bs-info)",
+    success: "var(--bs-success)",
     callStateIcon: "#f8d7da",
     mutedIconBorder: "#6fa8dc",
     deafenedIconBorder: "#6fa8dc",
-    mutedIconText: "red",
-    localMutedIconText: "black",
+    mutedIconText: "black",
+    deafenedIconText: "white",
     remoteMuteButtonHoverBackground: "rgb(200 200 200 / 50%)",
     remoteMuteButtonHoverText: "#ccc",
     chatterSectionBackground: "#333",
+    firehosePreWrapBackground: "#333",
+    firehosePreWrapText: "white",
     codeBlockBackground: "#333",
     codeBlockText: "white",
-    mentionSpanBackground: "#444",
-    mentionSpanText: "inherit",
-    selfMentionSpanBackground: "#4649ef",
-    selfMentionSpanText: "#fff",
+    mentionSpanBackground: "#4649ef",
+    mentionSpanText: "#fff",
     selectedMentionSpanShadow: "#b4d5ff",
+    selectedMentionSpanBackground: "#4649ef",
+    selectedMentionSpanText: "#fff",
     autocompleteBackground: "#333",
     autocompleteShadow: "0 1px 5px rgb(255 255 255 / 20%)",
     matchCandidateSelectedBackground: "#444",
     documentMessageBackground: "#333",
+    guessColorCorrectBackground: "#155724",
+    guessColorCorrectHoverBackground: "#11461b",
+    guessColorCorrectIcon: "#d4edda",
+    guessColorIncorrectBackground: "#721c24",
+    guessColorIncorrectHoverBackground: "#5e171d",
+    guessColorIncorrectIcon: "#f8d7da",
+    guessColorIntermediateBackground: "#856404",
+    guessColorIntermediateHoverBackground: "#6e5303",
+    guessColorIntermediateIcon: "#fff3cd",
+    guessColorPendingBackground: "#333",
+    guessColorPendingHoverBackground: "#444",
+    guessColorPendingIcon: "#fff",
+    guessColorRejectedBackground: "#383d41",
+    guessColorRejectedHoverBackground: "#2e3238",
+    guessColorRejectedIcon: "#e2e3e5",
     avatarInitialText: "#ffffff",
     avatarInitialBackground: "#000000",
     avatarSelfBorder: "#6fa8dc",
@@ -229,14 +294,16 @@ export const darkTheme: Theme = {
     announcementToastBackground: "#333",
     announcementToastText: "white",
     announcementToastBorder: "rgba(255, 255, 255, 0.1)",
-    hoverChatMessageBackground: "#222",
+    replyChatMessageBackground: "rgb(0, 56, 109)",
+    hoverChatMessageBackground: "rgb(52, 52, 52)",
     systemChatMessageBackground: "rgb(31, 31, 31)",
     pinnedChatMessageBackground: "rgb(92, 56, 17)",
+    replyButtonText: "#666",
+    hoverReplyButtonText: "#000",
+    replyingToBackground: "#383838",
     fancyEditorBackground: "#383838",
+    puzzleMetadataBackground: "black",
     navBarBottomBorder: "#6c757d",
-    navBarBackground: "#333333",
-    setupPageHeaderBackground: "#333333",
-    setupPageCircuitBreakerHeaderBackground: "#333355",
     jumbotronBackground: "inherit",
     guess: {
       correct: {
@@ -270,6 +337,7 @@ export const darkTheme: Theme = {
       unsolved: "rgb(46, 46, 46)",
       solved: "rgb(32, 66, 32)",
     },
+    contributionsGraph: ["#22272e", "#004225", "#006d32", "#30a14e", "#39d353"],
   },
   reactSelectTheme: {
     borderRadius: 4,

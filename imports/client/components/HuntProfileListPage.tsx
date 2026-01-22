@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Hunts from "../../lib/models/Hunts";
 import InvitationCodes from "../../lib/models/InvitationCodes";
 import MeteorUsers from "../../lib/models/MeteorUsers";
+import UserStatuses from "../../lib/models/UserStatuses";
 import {
   listAllRolesForHunt,
   userMayAddUsersToHunt,
@@ -12,30 +13,112 @@ import {
   userMayUseDiscordBotAPIs,
 } from "../../lib/permission_stubs";
 import invitationCodesForHunt from "../../lib/publications/invitationCodesForHunt";
+import statusesForHuntUsers from "../../lib/publications/statusesForHuntUsers";
 import useTypedSubscribe from "../hooks/useTypedSubscribe";
 import ProfileList from "./ProfileList";
+
+export interface UserStatusType {
+  status: {
+    status: "offline" | "online";
+    at: Date | null;
+  };
+  puzzleStatus: {
+    source: string | null;
+    at: Date | null;
+    puzzle: string | null;
+  };
+}
+
+export const userStatusesToLastSeen = (
+  statuses: UserStatusType[],
+): UserStatusType | object => {
+  return statuses.reduce((acc, uStatus) => {
+    const user = uStatus.user;
+    if (!acc[user]) {
+      acc[user] = {
+        status: {
+          status: "offline",
+          at: null,
+        },
+        puzzleStatus: {
+          source: null,
+          at: null,
+          puzzle: null,
+        },
+      };
+    }
+
+    if (
+      uStatus.type === "puzzleStatus" &&
+      uStatus.updatedAt > acc[user].puzzleStatus.at
+    ) {
+      // do puzzle status things, we should have only one here
+      acc[user].puzzleStatus.at = uStatus.updatedAt;
+      acc[user].puzzleStatus.source = uStatus.type;
+      acc[user].puzzleStatus.puzzle = uStatus.puzzle;
+    } else {
+      if (
+        acc[user][uStatus.type].status === "offline" ||
+        uStatus.status === "online"
+      ) {
+        // upgrade the status if we've seen it
+        acc[user][uStatus.type].status = uStatus.status;
+      }
+      if (acc[user][uStatus.type].status === uStatus.status) {
+        // get the most recent timestamp for our status
+        acc[user][uStatus.type].at =
+          uStatus.updatedAt > acc[user][uStatus.type].at
+            ? uStatus.updatedAt
+            : acc[user][uStatus.type].at;
+      }
+    }
+
+    return acc;
+  }, {});
+};
 
 const HuntProfileListPage = () => {
   const huntId = useParams<"huntId">().huntId!;
 
+  const statusesLoading = useTypedSubscribe(statusesForHuntUsers, { huntId });
   const profilesLoading = useSubscribe("huntProfiles", huntId);
   const userRolesLoading = useSubscribe("huntRoles", huntId);
   const invitationCodesLoading = useTypedSubscribe(invitationCodesForHunt, {
     huntId,
   });
   const loading =
-    profilesLoading() || userRolesLoading() || invitationCodesLoading();
+    profilesLoading() ||
+    userRolesLoading() ||
+    invitationCodesLoading() ||
+    statusesLoading();
 
-  const users = useTracker(
+  const userStatuses = useTracker(
     () =>
       loading
         ? []
-        : MeteorUsers.find(
-            { hunts: huntId, displayName: { $ne: undefined } },
-            { sort: { displayName: 1 } },
-          ).fetch(),
+        : userStatusesToLastSeen(UserStatuses.find({ hunt: huntId }).fetch()),
     [huntId, loading],
   );
+
+  const users = useTracker(() => {
+    if (loading) return [];
+
+    const fetchedUsers = MeteorUsers.find({
+      hunts: huntId,
+      displayName: { $ne: undefined },
+    }).fetch();
+
+    // Sort the resulting array case-insensitively
+    return fetchedUsers.sort((a, b) => {
+      return (a.displayName || "").localeCompare(
+        b.displayName || "",
+        undefined,
+        {
+          sensitivity: "base", // Ignores case and accents (a = A = á)
+        },
+      );
+    });
+  }, [huntId, loading]);
 
   const hunt = useTracker(() => Hunts.findOne(huntId), [huntId]);
   const {
@@ -85,6 +168,7 @@ const HuntProfileListPage = () => {
       canMakeOperator={canMakeOperator}
       canUpdateHuntInvitationCode={canUpdateHuntInvitationCode}
       invitationCode={invitationCode}
+      userStatuses={userStatuses}
     />
   );
 };

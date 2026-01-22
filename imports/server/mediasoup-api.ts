@@ -25,14 +25,14 @@ import { registerPeriodicCleanupHook, serverId } from "./garbage-collection";
 import ignoringDuplicateKeyErrors from "./ignoringDuplicateKeyErrors";
 import withLock from "./withLock";
 
-registerPeriodicCleanupHook(async (deadServer) => {
-  await Peers.removeAsync({ createdServer: deadServer });
+registerPeriodicCleanupHook(async (deadServers) => {
+  await Peers.removeAsync({ createdServer: { $in: deadServers } });
 
   // Deleting a room creates a potential inconsistency, since we might still
   // have peers on other servers. Therefore, take out a lock to make sure we
   // see a consistent view (and everyone else does too), then check if there
   // are still peers joined to this room
-  for await (const room of Rooms.find({ routedServer: deadServer })) {
+  for await (const room of Rooms.find({ routedServer: { $in: deadServers } })) {
     await withLock(`mediasoup:room:${room.call}`, async () => {
       const removed = !!(await Rooms.removeAsync(room._id));
       if (!removed) {
@@ -100,6 +100,25 @@ Meteor.publish("mediasoup:metadata", async function (hunt, call) {
   }
 
   return [Peers.find({ hunt, call }), CallHistories.find({ hunt, call })];
+});
+
+Meteor.publish("mediasoup:metadataAll", async function (hunt) {
+  check(hunt, String);
+
+  if (!this.userId) {
+    throw new Meteor.Error(401, "Not logged in");
+  }
+
+  if (
+    !userMayJoinCallsForHunt(
+      await MeteorUsers.findOneAsync(this.userId),
+      await Hunts.findOneAsync(hunt),
+    )
+  ) {
+    throw new Meteor.Error(403, "Not a member of this hunt");
+  }
+
+  return Peers.find({ hunt });
 });
 
 Meteor.publish("mediasoup:join", async function (hunt, call, tab) {
