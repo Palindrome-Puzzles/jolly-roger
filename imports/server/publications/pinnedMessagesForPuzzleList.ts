@@ -1,10 +1,10 @@
 import { check } from "meteor/check";
+import ChatMessages from "../../lib/models/ChatMessages";
 import MeteorUsers from "../../lib/models/MeteorUsers";
-import Subscribers from "../models/Subscribers";
-import presenceForHunt from "../../lib/publications/presenceForHunt";
+import pinnedMessagesForPuzzleList from "../../lib/publications/pinnedMessagesForPuzzleList";
 import definePublication from "./definePublication";
 
-definePublication(presenceForHunt, {
+definePublication(pinnedMessagesForPuzzleList, {
   validate(arg) {
     check(arg, {
       huntId: String,
@@ -22,8 +22,9 @@ definePublication(presenceForHunt, {
       return [];
     }
 
-    return Subscribers.find({
-      "context.hunt": huntId,
+    return ChatMessages.find({
+      hunt: huntId,
+      pinTs: { $ne: null },
     });
   },
 });

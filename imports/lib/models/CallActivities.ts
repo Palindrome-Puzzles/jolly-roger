@@ -1,4 +1,5 @@
 import { Mongo } from "meteor/mongo";
+import { z } from "zod";
 
 export interface CallActivity {
   _id: string; // Required for Meteor collections
@@ -10,6 +11,8 @@ export interface CallActivity {
   call: string; // Puzzle ID if related to a puzzle
 }
 
-const CallActivities = new Mongo.Collection<CallActivity>("callActivities");
+export const CallActivities = new Mongo.Collection<CallActivity>(
+  "callActivities",
+);
 
 export default CallActivities;

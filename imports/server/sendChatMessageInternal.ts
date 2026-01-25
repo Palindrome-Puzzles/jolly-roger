@@ -8,10 +8,16 @@ export default async function sendChatMessageInternal({
   puzzleId,
   content,
   sender,
+  pinTs = null,
+  parentId = null,
+  attachments = null,
 }: {
   puzzleId: string;
   content: ChatMessageContentType;
   sender: string | undefined;
+  pinTs?: Date | null;
+  parentId: string | null;
+  attachments?: ChatAttachmentType[] | null;
 }) {
   const puzzle = await Puzzles.findOneAsync(puzzleId);
   if (!puzzle) {
@@ -24,6 +30,9 @@ export default async function sendChatMessageInternal({
     content,
     sender,
     timestamp: new Date(),
+    pinTs,
+    parentId,
+    attachments: attachments ?? [],
   });
 
   await GlobalHooks.runChatMessageCreatedHooks(msgId);

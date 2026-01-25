@@ -78,7 +78,7 @@ Meteor.publish("subscribers.counts", async function (q: Record<string, any>) {
   const handle = await cursor.observeAsync({
     added: (doc) => {
       const { name, user } = doc;
-      if (!Object.hasOwn(counters, name)) {
+      if (!Object.prototype.hasOwnProperty.call(counters, name)) {
         counters[name] = {};
 
         if (initialized) {
@@ -86,7 +86,7 @@ Meteor.publish("subscribers.counts", async function (q: Record<string, any>) {
         }
       }
 
-      if (!Object.hasOwn(counters[name], user)) {
+      if (!Object.prototype.hasOwnProperty.call(counters[name], user)) {
         counters[name]![user] = 0;
       }
 

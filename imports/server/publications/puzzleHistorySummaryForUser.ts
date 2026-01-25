@@ -109,18 +109,18 @@ class UserPuzzleHistoryAggregator {
         collection: Bookmarks,
         query: { user: this.userId },
         fields: { puzzle: 1, updatedAt: 1 },
-        handler: (_id: string, fields: { puzzle?: string }) =>
+        handler: (id: string, fields: { puzzle?: string }) =>
           fields.puzzle && this.recomputePuzzleSummary(fields.puzzle),
-        removedHandler: (_id: string, fields: { puzzle?: string }) =>
+        removedHandler: (id: string, fields: { puzzle?: string }) =>
           fields.puzzle && this.recomputePuzzleSummary(fields.puzzle),
       },
       {
         collection: CallActivities,
         query: { user: this.userId },
         fields: { call: 1, ts: 1 },
-        handler: (_id: string, fields: { call?: string }) =>
+        handler: (id: string, fields: { call?: string }) =>
           fields.call && this.recomputePuzzleSummary(fields.call),
-        removedHandler: (_id: string, fields: { call?: string }) =>
+        removedHandler: (id: string, fields: { call?: string }) =>
           fields.call && this.recomputePuzzleSummary(fields.call),
       },
       {
@@ -132,27 +132,27 @@ class UserPuzzleHistoryAggregator {
           ],
         },
         fields: { puzzle: 1, createdAt: 1 },
-        handler: (_id: string, fields: { puzzle?: string }) =>
+        handler: (id: string, fields: { puzzle?: string }) =>
           fields.puzzle && this.recomputePuzzleSummary(fields.puzzle),
-        removedHandler: (_id: string, fields: { puzzle?: string }) =>
+        removedHandler: (id: string, fields: { puzzle?: string }) =>
           fields.puzzle && this.recomputePuzzleSummary(fields.puzzle),
       },
       {
         collection: DocumentActivities,
         query: { user: this.userId },
         fields: { puzzle: 1, ts: 1 },
-        handler: (_id: string, fields: { puzzle?: string }) =>
+        handler: (id: string, fields: { puzzle?: string }) =>
           fields.puzzle && this.recomputePuzzleSummary(fields.puzzle),
-        removedHandler: (_id: string, fields: { puzzle?: string }) =>
+        removedHandler: (id: string, fields: { puzzle?: string }) =>
           fields.puzzle && this.recomputePuzzleSummary(fields.puzzle),
       },
       {
         collection: Guesses,
         query: { createdBy: this.userId },
         fields: { puzzle: 1, createdAt: 1, state: 1 },
-        handler: (_id: string, fields: { puzzle?: string }) =>
+        handler: (id: string, fields: { puzzle?: string }) =>
           fields.puzzle && this.recomputePuzzleSummary(fields.puzzle),
-        removedHandler: (_id: string, fields: { puzzle?: string }) =>
+        removedHandler: (id: string, fields: { puzzle?: string }) =>
           fields.puzzle && this.recomputePuzzleSummary(fields.puzzle),
       },
       {
@@ -207,7 +207,7 @@ class UserPuzzleHistoryAggregator {
                 const puzzleId =
                   docFields.puzzle ?? (docFields as { call?: string }).call;
                 if (puzzleId) {
-                  void this.recomputePuzzleSummary(puzzleId);
+                  this.recomputePuzzleSummary(puzzleId);
                 }
               }
             },
@@ -383,7 +383,7 @@ class UserPuzzleHistoryAggregator {
       if (this.tagNames[tagId] === newName) return; // No change
       this.tagNames[tagId] = newName;
     }
-    this.puzzleHistoryMap.forEach((_item, puzzleId) => {
+    this.puzzleHistoryMap.forEach((item, puzzleId) => {
       // A bit inefficient: fetch puzzle tags again. Could optimize by storing tags in summary item.
       void Puzzles.findOneAsync(puzzleId, { fields: { tags: 1 } }).then(
         (puzzle) => {
@@ -405,7 +405,7 @@ class UserPuzzleHistoryAggregator {
 
     this.puzzleHistoryMap.forEach((item, puzzleId) => {
       if (item.huntId === huntId) {
-        void this.recomputePuzzleSummary(puzzleId);
+        this.recomputePuzzleSummary(puzzleId);
       }
     });
   }

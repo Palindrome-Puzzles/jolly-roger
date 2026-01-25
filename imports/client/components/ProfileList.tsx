@@ -385,13 +385,31 @@ const UserStatusBadge = React.memo(
     huntId: string | undefined;
     huntPuzzles: PuzzleType[];
   }) => {
+    if (!huntId) {
+      // we don't show statuses on the all list
+      return null;
+    }
+
+    if (!statusObj) {
+      // we should display users as offline if we don't have data on them
+      return (
+        <StatusDiv>
+          <OverlayTrigger placement="top" overlay={<Tooltip>Offline</Tooltip>}>
+            <ButtonGroup size="sm">
+              <Button variant="outline-secondary">Offline</Button>
+            </ButtonGroup>
+          </OverlayTrigger>
+        </StatusDiv>
+      );
+    }
+
     const [lastSeen, setLastSeen] = useState<Date | null>(
       statusObj?.status?.at || null,
     );
     const [lastPuzzle, setLastPuzzle] = useState<Date | null>(
       statusObj?.puzzleStatus?.at || null,
     );
-    const [_timeNow, setTimeNow] = useState<Date | null>(new Date() || null);
+    const [timeNow, setTimeNow] = useState<Date | null>(new Date() || null);
     const statusDebounceThreshold = new Date(Date.now() - 2 * 60 * 1000);
     const relativeDebounceThreshold = new Date(Date.now() - 60 * 1000);
 
@@ -406,7 +424,7 @@ const UserStatusBadge = React.memo(
     }, [statusObj]);
 
     const statusDisplay = useMemo(() => {
-      if (!lastSeen || !statusObj || !huntId) {
+      if (!lastSeen) {
         return null;
       }
       const lastStatusRecently =
@@ -433,7 +451,7 @@ const UserStatusBadge = React.memo(
             <FontAwesomeIcon icon={faPuzzlePiece} fixedWidth />
             &nbsp;
             {puzzleName?.length > 25
-              ? `${puzzleName.slice(0, 25)}...`
+              ? puzzleName.slice(0, 25) + "..."
               : puzzleName}
           </strong>
           {puzzleStatus !== "online" &&
@@ -466,7 +484,7 @@ const UserStatusBadge = React.memo(
             </span>
           ) : null}
           {puzzleStatus !== "online" && lastPuzzle
-            ? `, last active on puzzle: ${shortCalendarTimeFormat(lastPuzzle)}`
+            ? ", last active on puzzle: " + shortCalendarTimeFormat(lastPuzzle)
             : lastPuzzle
               ? ", currently active on puzzle"
               : null}
@@ -509,32 +527,7 @@ const UserStatusBadge = React.memo(
           </OverlayTrigger>
         </StatusDiv>
       );
-    }, [
-      statusObj,
-      lastSeen,
-      lastPuzzle,
-      huntPuzzles,
-      huntId,
-      relativeDebounceThreshold,
-      statusDebounceThreshold,
-    ]);
-    if (!huntId) {
-      // we don't show statuses on the all list
-      return null;
-    }
-
-    if (!statusObj) {
-      // we should display users as offline if we don't have data on them
-      return (
-        <StatusDiv>
-          <OverlayTrigger placement="top" overlay={<Tooltip>Offline</Tooltip>}>
-            <ButtonGroup size="sm">
-              <Button variant="outline-secondary">Offline</Button>
-            </ButtonGroup>
-          </OverlayTrigger>
-        </StatusDiv>
-      );
-    }
+    }, [statusObj, lastSeen, lastPuzzle, huntPuzzles, timeNow]);
 
     return statusDisplay;
   },
