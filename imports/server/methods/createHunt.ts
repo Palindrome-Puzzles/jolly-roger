@@ -1,8 +1,9 @@
 import { check } from "meteor/check";
 import { Meteor } from "meteor/meteor";
 import Logger from "../../Logger";
-import Hunts from "../../lib/models/Hunts";
+import Hunts, { EditableHuntType, HuntPattern } from "../../lib/models/Hunts";
 import MeteorUsers from "../../lib/models/MeteorUsers";
+import Settings from "../../lib/models/Settings";
 import { addUserToRole, checkAdmin } from "../../lib/permission_stubs";
 import createHunt, { CreateHuntPayloadSchema } from "../../methods/createHunt";
 import addUsersToDiscordRole from "../addUsersToDiscordRole";

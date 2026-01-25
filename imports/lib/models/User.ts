@@ -23,6 +23,10 @@ declare module "meteor/meteor" {
       discordAccount?: DiscordAccountType;
       phoneNumber?: string;
       dingwords?: string[];
+      dingwordsOpenMatch?: boolean;
+      dingwordsMatchOnce?: string[];
+      dingwordsMatchedOnce?: Record<string, Record<string, string[]>>; // hunt -> puzzle -> "used" words
+      suppressedDingwords?: Record<string, Record<string, string[]>>; // hunt -> puzzle -> "used" words
     }
   }
 }
@@ -55,6 +59,11 @@ export const User = z.object({
   discordAccount: DiscordAccount.optional(),
   phoneNumber: nonEmptyString.optional(),
   dingwords: nonEmptyString.array().optional(),
+  dingwordsOpenMatch: z.boolean().optional(),
+  suppressedDingwords: z
+    .record(z.string(), z.record(z.string(), nonEmptyString.array()))
+    .optional(),
+  isOffsite: z.boolean().optional(),
 });
 validateSchema(User);
 
@@ -63,4 +72,10 @@ export type ProfileFields =
   | "googleAccount"
   | "discordAccount"
   | "phoneNumber"
-  | "dingwords";
+  | "hunts"
+  | "dingwords"
+  | "dingwordsOpenMatch"
+  | "suppressedDingwords"
+  | "isOffsite";
+
+export default User;
