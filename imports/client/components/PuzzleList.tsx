@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import type { ChatMessageType } from "../../lib/models/ChatMessages";
 import type { PuzzleType } from "../../lib/models/Puzzles";
 import type { TagType } from "../../lib/models/Tags";
 import Puzzle from "./Puzzle";
@@ -18,6 +19,7 @@ const PuzzleList = React.memo(
     suppressTags,
     segmentAnswers,
     subscribers,
+    pinnedMessages,
     puzzleUsers,
   }: {
     // The puzzles to show in this list
@@ -30,6 +32,7 @@ const PuzzleList = React.memo(
     suppressTags?: string[];
     segmentAnswers?: boolean;
     subscribers?: Record<string, Record<string, string[]>>;
+    pinnedMessages?: ChatMessageType[] | null;
     puzzleUsers: Record<string, string[]>;
   }) => {
     // This component just renders the puzzles provided, in order.
