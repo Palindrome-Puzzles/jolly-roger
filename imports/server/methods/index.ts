@@ -68,3 +68,7 @@ import "./updateHunt";
 import "./updateProfile";
 import "./updatePuzzle";
 import "./userLoginOptions";
+
+import "./createPuzzleDocument";
+import "./isS3Configured";
+import "./replenishDocumentCache";
