@@ -2,7 +2,9 @@ import { Meteor } from "meteor/meteor";
 import { useTracker } from "meteor/react-meteor-data";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Container, Navbar, Row } from "react-bootstrap";
+import { Link, Navigate, useLocation } from "react-router-dom";
+import { useAppThemeState } from "../hooks/persisted-state";
 import App from "./App";
 import SplashPage from "./SplashPage";
 
@@ -35,6 +37,19 @@ export const AuthenticatedPage = ({
 }) => {
   const [loading, loggedIn] = useAuthenticated();
   const location = useLocation();
+  const [appTheme, setAppTheme] = useAppThemeState();
+
+  useEffect(() => {
+    // This is a bit of a hack, but I think it's going to be the only
+    // way that it works. That's because we don't have the ability to
+    // manipulate the DOM through usual React methods, so we're doing
+    // it directly instead.
+    const body = document.body;
+    body.setAttribute("data-bs-theme", appTheme ?? "light");
+    return () => {
+      body.removeAttribute("data-bs-theme");
+    };
+  }, [appTheme]);
 
   if (loading) {
     return null;
@@ -66,4 +81,19 @@ export const UnauthenticatedPage = ({
   }
 
   return <SplashPage>{children}</SplashPage>;
+};
+
+export const NoAuthenticationPage = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <Container>
+      <Navbar>
+        <Link to="/">Jolly Roger</Link>
+      </Navbar>
+      <Row>{children}</Row>
+    </Container>
+  );
 };
