@@ -27,7 +27,7 @@ const LabelledRadio = ({
 }: {
   group: string;
   value: string;
-  label: string;
+  label: string | Element;
   defaultChecked: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
