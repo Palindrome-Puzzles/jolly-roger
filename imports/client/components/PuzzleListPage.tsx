@@ -9,6 +9,7 @@ import {
   type FC,
   useCallback,
   useId,
+  useMemo,
   useRef,
 } from "react";
 import Alert from "react-bootstrap/Alert";
@@ -18,6 +19,7 @@ import type { FormControlProps } from "react-bootstrap/FormControl";
 import FormControl from "react-bootstrap/FormControl";
 import FormGroup from "react-bootstrap/FormGroup";
 import FormLabel from "react-bootstrap/FormLabel";
+import FormCheck from "react-bootstrap/FormCheck";
 import InputGroup from "react-bootstrap/InputGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
@@ -35,13 +37,14 @@ import puzzleActivityForHunt from "../../lib/publications/puzzleActivityForHunt"
 import puzzlesForPuzzleList from "../../lib/publications/puzzlesForPuzzleList";
 import {
   filteredPuzzleGroups,
-  puzzleGroupsByRelevance,
+  groupPuzzlesByTags,
 } from "../../lib/puzzle-sort-and-group";
 import { computeSolvedness } from "../../lib/solvedness";
 import createPuzzle from "../../methods/createPuzzle";
 import {
   useHuntPuzzleListCollapseGroups,
   useHuntPuzzleListDisplayMode,
+  useHuntPuzzleListGrouping,
   useHuntPuzzleListShowSolved,
   useOperatorActionsHiddenForHunt,
 } from "../hooks/persisted-state";
@@ -58,6 +61,7 @@ import PuzzleModalForm from "./PuzzleModalForm";
 import RelatedPuzzleGroup, { PuzzleGroupDiv } from "./RelatedPuzzleGroup";
 import RelatedPuzzleList from "./RelatedPuzzleList";
 import { mediaBreakpointDown } from "./styling/responsive";
+import Select, { type ActionMeta } from "react-select";
 
 const ViewControls = styled.div<{ $canAdd?: boolean }>`
   display: grid;
@@ -161,6 +165,8 @@ const HuntNavWrapper = styled.div`
   )}
 `;
 
+type GroupBySelectOption = { value: string; label: string };
+
 const PuzzleListView = ({
   huntId,
   canAdd,
@@ -200,6 +206,7 @@ const PuzzleListView = ({
   const addModalRef = useRef<PuzzleModalFormHandle>(null);
   const searchBarRef = useRef<HTMLInputElement>(null);
   const [displayMode, setDisplayMode] = useHuntPuzzleListDisplayMode(huntId);
+  const [groupingOpts, setGroupingOpts] = useHuntPuzzleListGrouping(huntId);
   const [showSolved, setShowSolved] = useHuntPuzzleListShowSolved(huntId);
   const [huntPuzzleListCollapseGroups, setHuntPuzzleListCollapseGroups] =
     useHuntPuzzleListCollapseGroups(huntId);
@@ -358,7 +365,17 @@ const PuzzleListView = ({
           // We group and sort first, and only filter afterward, to avoid losing the
           // relative group structure as a result of removing some puzzles from
           // consideration.
-          const unfilteredGroups = puzzleGroupsByRelevance(allPuzzles, allTags);
+
+          const unfilteredGroups = groupPuzzlesByTags(
+            allPuzzles,
+            allTags,
+            groupingOpts.groupBy,
+            groupingOpts.nest,
+            groupingOpts.merge,
+            groupingOpts.makeNones,
+          );
+
+          // const unfilteredGroups = puzzleGroupsByRelevance(allPuzzles, allTags);
           const puzzleGroups = filteredPuzzleGroups(
             unfilteredGroups,
             retainedIds,
@@ -461,6 +478,7 @@ const PuzzleListView = ({
     [
       huntId,
       displayMode,
+      groupingOpts,
       allPuzzles,
       allTags,
       canUpdate,
@@ -534,6 +552,44 @@ const PuzzleListView = ({
   const retainedDeletedPuzzles =
     deletedPuzzles && puzzlesMatchingSearchString(deletedPuzzles);
 
+  const onGroupByChange = useCallback(
+    (
+      value: readonly GroupBySelectOption[],
+      action: ActionMeta<GroupBySelectOption>,
+    ) => {
+      switch (action.action) {
+        case "clear":
+        case "create-option":
+        case "deselect-option":
+        case "pop-value":
+        case "remove-value":
+        case "select-option":
+          setGroupingOpts({
+            groupBy: value.map((v) => v.value),
+            makeNones: groupingOpts.makeNones,
+            merge: groupingOpts.merge,
+            nest: groupingOpts.nest,
+          });
+          break;
+        default:
+          return;
+      }
+    },
+    [setGroupingOpts, groupingOpts],
+  );
+  const groupOptions = useMemo(() => {
+    const prefixes = new Set(
+      allTags.flatMap((t) => {
+        const i = t.name.indexOf(":");
+        if (i < 0) return [];
+        return t.name.slice(0, i);
+      }),
+    );
+    return Array.from(prefixes)
+      .sort()
+      .map((prefix) => ({ label: prefix, value: prefix }));
+  }, [allTags]);
+
   return (
     <div>
       <ViewControls $canAdd={canAdd}>
@@ -563,6 +619,51 @@ const PuzzleListView = ({
               </ToggleButton>
             </StyledToggleButtonGroup>
           </ButtonToolbar>
+        </FormGroup>
+        <FormGroup>
+          <FormLabel>{t("puzzleList.groupedBy", "Group By")}</FormLabel>
+          <Select
+            defaultValue={groupingOpts.groupBy.map((v) => ({
+              value: v,
+              label: v,
+            }))}
+            isMulti
+            options={groupOptions}
+            onChange={onGroupByChange}
+          />
+          <FormCheck
+            type="checkbox"
+            label="Nest groups"
+            checked={groupingOpts.nest}
+            onChange={() =>
+              setGroupingOpts({
+                ...groupingOpts,
+                nest: !groupingOpts.nest,
+              })
+            }
+          />
+          <FormCheck
+            type="checkbox"
+            label="Merge identical groups"
+            checked={groupingOpts.merge}
+            onChange={() =>
+              setGroupingOpts({
+                ...groupingOpts,
+                merge: !groupingOpts.merge,
+              })
+            }
+          />
+          <FormCheck
+            type="checkbox"
+            label="Make 'key:None' groups"
+            checked={groupingOpts.makeNones}
+            onChange={() =>
+              setGroupingOpts({
+                ...groupingOpts,
+                makeNones: !groupingOpts.makeNones,
+              })
+            }
+          />
         </FormGroup>
         <FormGroup>
           <FormLabel>
