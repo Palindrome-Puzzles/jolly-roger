@@ -34,17 +34,17 @@ const FixtureHunt: FixtureHuntType = {
     { _id: "NwhNGo64jRs384HwN", name: "group:scout" },
     { _id: "27YauwyRpL6yMsCef", name: "is:meta" },
     { _id: "3GmSvYwYM5zy9f2F2", name: "is:metameta" },
-    { _id: "6uEokZ47zxWYp82c2", name: "meta-for:anger" },
-    { _id: "ZJ2ihL4gT6gkmRgRo", name: "meta-for:build" },
-    { _id: "mtzStZ4mwNmjzsbs2", name: "meta-for:deploy" },
-    { _id: "u8brYN3fD9gAbYPmu", name: "meta-for:disgust" },
-    { _id: "pq7EbR5SnY3C2iRmQ", name: "meta-for:fear" },
-    { _id: "NfPmxPpNBQKNR2Y7M", name: "meta-for:flee" },
-    { _id: "5rMx6AkFJnTxxn9g3", name: "meta-for:games-island" },
-    { _id: "824j638yaMPZgRwCG", name: "meta-for:hacking-island" },
-    { _id: "GHpDh3wjchBTm2Rnm", name: "meta-for:joy" },
-    { _id: "2Z4MpQrREfBrnwLie", name: "meta-for:sadness" },
-    { _id: "pgMERSdKeowNn2xpd", name: "meta-for:scout" },
+    { _id: "6uEokZ47zxWYp82c2", name: "meta-for:group:anger" },
+    { _id: "ZJ2ihL4gT6gkmRgRo", name: "meta-for:group:build" },
+    { _id: "mtzStZ4mwNmjzsbs2", name: "meta-for:group:deploy" },
+    { _id: "u8brYN3fD9gAbYPmu", name: "meta-for:group:disgust" },
+    { _id: "pq7EbR5SnY3C2iRmQ", name: "meta-for:group:fear" },
+    { _id: "NfPmxPpNBQKNR2Y7M", name: "meta-for:group:flee" },
+    { _id: "5rMx6AkFJnTxxn9g3", name: "meta-for:group:games-island" },
+    { _id: "824j638yaMPZgRwCG", name: "meta-for:group:hacking-island" },
+    { _id: "GHpDh3wjchBTm2Rnm", name: "meta-for:group:joy" },
+    { _id: "2Z4MpQrREfBrnwLie", name: "meta-for:group:sadness" },
+    { _id: "pgMERSdKeowNn2xpd", name: "meta-for:group:scout" },
   ],
   puzzles: [
     {
@@ -1181,7 +1181,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "A Wanderer's Colorlog",
       url: "https://puzzmon.world/puzzles/a_wanderers_colorlog",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "AWanderersCoLorLo",
       tags: [
         "diKingdomofthePuz",
@@ -1195,7 +1199,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Bird Calls",
       url: "https://puzzmon.world/puzzles/bird_calls",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "BirdCaLLsaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1208,7 +1216,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Exsportise",
       url: "https://puzzmon.world/puzzles/exsportise",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Exsportiseaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1261,7 +1273,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Shopping Spree",
       url: "https://puzzmon.world/puzzles/shopping_spree",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "ShoppingSpreeaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1274,7 +1290,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Welcome To MIT",
       url: "https://puzzmon.world/puzzles/welcome_to_mit",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "WeLcomeToMiTaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1300,7 +1320,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Crossloop",
       url: "https://puzzmon.world/puzzles/crossloop",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "CrossLoopaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1313,7 +1337,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Do They Have Chemistry? ",
       url: "https://puzzmon.world/puzzles/do_they_have_chemistry",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "DoTheyHaveChemist",
       tags: [
         "diKingdomofthePuz",
@@ -1326,7 +1354,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "DROP * FROM Teams",
       url: "https://puzzmon.world/puzzles/drop_star_from_teams",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "DRoPFRoMTeamsaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1352,7 +1384,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Somebody",
       url: "https://puzzmon.world/puzzles/somebody",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Somebodyaaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1366,7 +1402,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "This Puzzle Has Been Here The Whole Time",
       url: "https://puzzmon.world/puzzles/this_puzzle_has_been_here_the_whole_time",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "ThisPuzzLeHasBeen",
       tags: [
         "diKingdomofthePuz",
@@ -1379,7 +1419,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Urban Angst",
       url: "https://puzzmon.world/puzzles/urban_angst",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "urbanAngstaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1407,7 +1451,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Balancing Act",
       url: "https://puzzmon.world/puzzles/balancing_act",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "BaLancingActaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1433,7 +1481,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Pixelpinpointr",
       url: "https://puzzmon.world/puzzles/pixelpinpointr",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "PixeLpinpointraaa",
       tags: [
         "diKingdomofthePuz",
@@ -1472,7 +1524,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Alchemy Academy",
       url: "https://puzzmon.world/puzzles/alchemy_academy",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "ALchemyAcademyaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1486,7 +1542,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Nine Lives",
       url: "https://puzzmon.world/puzzles/nine_lives",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "NineLivesaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1538,7 +1598,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Jumping To Conclusions",
       url: "https://puzzmon.world/puzzles/jumping_to_conclusions",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "JumpingToConcLusi",
       tags: [
         "diKingdomofthePuz",
@@ -1552,7 +1616,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Maps",
       url: "https://puzzmon.world/puzzles/maps",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Mapsaaaaaaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1565,7 +1633,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Night Circus",
       url: "https://puzzmon.world/puzzles/night_circus",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "NightCircusaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1605,7 +1677,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Watchtower",
       url: "https://puzzmon.world/puzzles/watchtower",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Watchtoweraaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1634,7 +1710,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Chemical X",
       url: "https://puzzmon.world/puzzles/chemical_x",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "ChemicaLXaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1660,7 +1740,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Data Revisualization",
       url: "https://puzzmon.world/puzzles/data_revisualization",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "DataRevisuaLizati",
       tags: ["diKingdomofthePuz", "reELderDriftsaaaa", "tynormaLaaaaaaaaa"],
     },
@@ -1668,7 +1752,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Financial Literacy",
       url: "https://puzzmon.world/puzzles/financial_literacy",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "FinanciaLLiteracy",
       tags: [
         "diKingdomofthePuz",
@@ -1681,7 +1769,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Go Back to Square Fourteen",
       url: "https://puzzmon.world/puzzles/go_back_to_square_fourteen",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "GoBacktoSquareFou",
       tags: [
         "diKingdomofthePuz",
@@ -1694,7 +1786,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Method To The Mathmess",
       url: "https://puzzmon.world/puzzles/method_to_the_mathmess",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "MethodToTheMathme",
       tags: [
         "diKingdomofthePuz",
@@ -1708,7 +1804,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Nominative Determinism",
       url: "https://puzzmon.world/puzzles/nominative_determinism",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "NominativeDetermi",
       tags: [
         "diKingdomofthePuz",
@@ -1722,7 +1822,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Railway Terminal",
       url: "https://puzzmon.world/puzzles/railway_terminal",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "RaiLwayTerminaLaa",
       tags: [
         "diKingdomofthePuz",
@@ -1736,7 +1840,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Shapes",
       url: "https://puzzmon.world/puzzles/shapes",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Shapesaaaaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1762,7 +1870,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Turing Machine",
       url: "https://puzzmon.world/puzzles/turing_machine",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "TuringMachineaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1775,7 +1887,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Uneven",
       url: "https://puzzmon.world/puzzles/uneven",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "unevenaaaaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1814,7 +1930,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Computation",
       url: "https://puzzmon.world/puzzles/computation",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Computationaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1828,7 +1948,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Electrical Circuit",
       url: "https://puzzmon.world/puzzles/electrical_circuit",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "ELectricaLCircuit",
       tags: [
         "diKingdomofthePuz",
@@ -1856,7 +1980,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Musical Numbers",
       url: "https://puzzmon.world/puzzles/musical_numbers",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "MusicaLNumbersaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1882,7 +2010,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Pursuit of Liberty",
       url: "https://puzzmon.world/puzzles/pursuit_of_liberty",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "PursuitofLibertya",
       tags: ["diKingdomofthePuz", "reTheBrightsaaaaa", "tynormaLaaaaaaaaa"],
     },
@@ -1903,7 +2035,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Sound Translation",
       url: "https://puzzmon.world/puzzles/sound_translation",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "SoundTransLationa",
       tags: [
         "diKingdomofthePuz",
@@ -1916,7 +2052,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Starry Night",
       url: "https://puzzmon.world/puzzles/starry_night",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "StarryNightaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1929,7 +2069,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Ancestry",
       url: "https://puzzmon.world/puzzles/ancestry",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Ancestryaaaaaaaaa",
       tags: ["diKingdomofthePuz", "reRoyaLGrovesaaaa", "tycryptaaaaaaaaaa"],
     },
@@ -1937,7 +2081,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Filial Pie Tree",
       url: "https://puzzmon.world/puzzles/filial_pie_tree",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "FiLiaLPieTreeaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -1950,7 +2098,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Biology Research Exhibition",
       url: "https://puzzmon.world/puzzles/biology_research_exhibition",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "BioLogyResearchEx",
       tags: [
         "diKingdomofthePuz",
@@ -1963,7 +2115,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "I Think That's Why They Call It That",
       url: "https://puzzmon.world/puzzles/i_think_thats_why_they_call_it_that",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "iThinkThatsWhyThe",
       tags: [
         "diKingdomofthePuz",
@@ -1977,7 +2133,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Point of Divergence",
       url: "https://puzzmon.world/puzzles/point_of_divergence",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "PointofDivergence",
       tags: [
         "diKingdomofthePuz",
@@ -1991,7 +2151,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Rock On",
       url: "https://puzzmon.world/puzzles/rock_on",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Rockonaaaaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2005,7 +2169,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "\ud83c\udf39Garden",
       url: "https://puzzmon.world/puzzles/rose_garden",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Gardenaaaaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2019,7 +2187,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Strand-type Game",
       url: "https://puzzmon.world/puzzles/strand_type_game",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "StrandtypeGameaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2033,7 +2205,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "The Physics of Linguistic Fracture",
       url: "https://puzzmon.world/puzzles/the_physics_of_linguistic_fracture",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "ThePhysicsofLingu",
       tags: [
         "diKingdomofthePuz",
@@ -2046,7 +2222,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "V-fun",
       url: "https://puzzmon.world/puzzles/v_fun",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "vfunaaaaaaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2059,7 +2239,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "A Fake Artist Goes To Eland Islands",
       url: "https://puzzmon.world/puzzles/a_fake_artist_goes_to_eland_islands",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "AFakeArtistGoesTo",
       tags: ["diKingdomofthePuz", "reELandisLandsaaa", "tyfLyingaaaaaaaaa"],
     },
@@ -2067,7 +2251,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Adding and Abutting",
       url: "https://puzzmon.world/puzzles/adding_and_abutting",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "AddingandAbutting",
       tags: [
         "diKingdomofthePuz",
@@ -2081,7 +2269,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Gerrymandering",
       url: "https://puzzmon.world/puzzles/gerrymandering",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Gerrymanderingaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2094,7 +2286,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Hidden Numbers",
       url: "https://puzzmon.world/puzzles/hidden_numbers",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "HiddenNumbersaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2108,7 +2304,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Jam Session",
       url: "https://puzzmon.world/puzzles/jam_session",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "JamSessionaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2122,7 +2322,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Keep Going! ",
       url: "https://puzzmon.world/puzzles/keep_going",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "KeepGoingaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2135,7 +2339,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Linework",
       url: "https://puzzmon.world/puzzles/linework",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "Lineworkaaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2149,7 +2357,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Loch Mystic",
       url: "https://puzzmon.world/puzzles/loch_mystic",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "LochMysticaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2162,7 +2374,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Nailed It",
       url: "https://puzzmon.world/puzzles/nailed_it",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "NaiLeditaaaaaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2176,7 +2392,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "People In The Main Block",
       url: "https://puzzmon.world/puzzles/people_in_the_main_block",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "PeopLeinTheMainBL",
       tags: [
         "diKingdomofthePuz",
@@ -2190,7 +2410,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "The Quaking Earth",
       url: "https://puzzmon.world/puzzles/the_quaking_earth",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "TheQuakingEarthaa",
       tags: [
         "diKingdomofthePuz",
@@ -2203,7 +2427,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Word Compression",
       url: "https://puzzmon.world/puzzles/word_compression",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "WordCompressionaa",
       tags: [
         "diKingdomofthePuz",
@@ -2216,7 +2444,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Civil Service",
       url: "https://puzzmon.world/puzzles/civil_service",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "CiviLServiceaaaaa",
       tags: [
         "diKingdomofthePuz",
@@ -2229,7 +2461,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Australian Caduceus",
       url: "https://puzzmon.world/puzzles/australian_caduceus",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "AustraLianCaduceu",
       tags: [
         "diKingdomofthePuz",
@@ -2242,7 +2478,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Da' Bomb",
       url: "https://puzzmon.world/puzzles/da_bomb",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "DaBombaaaaaaaaaaa",
       tags: ["diKingdomofthePuz", "reSerpentineHiLLs", "tynormaLaaaaaaaaa"],
     },
@@ -2264,7 +2504,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Minute Minute Cryptic",
       url: "https://puzzmon.world/puzzles/minute_minute_cryptic",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "MinuteMinuteCrypt",
       tags: [
         "diKingdomofthePuz",
@@ -2291,7 +2535,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Road Trip",
       url: "https://puzzmon.world/puzzles/road_trip",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "RoadTripaaaaaaaaa",
       tags: ["diKingdomofthePuz", "reSerpentineHiLLs", "tycryptaaaaaaaaaa"],
     },
@@ -2321,7 +2569,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Mixed Messaging",
       url: "https://puzzmon.world/puzzles/mixed_messaging",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "MixedMessagingaaa",
       tags: ["diKingdomofthePuz", "mfarMixedMessagin"],
     },
@@ -2345,7 +2597,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Cryptozoologist",
       url: "https://puzzmon.world/puzzles/cryptozoologist",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "CryptozooLogistaa",
       tags: ["diKingdomofthePuz", "mfarCryptozooLogi"],
     },
@@ -2377,7 +2633,11 @@ export const FixtureHunt2: FixtureHuntType = {
       title: "Connect The Clans",
       url: "https://puzzmon.world/puzzles/connect_the_clans",
       expectedAnswerCount: 1,
-      guesses: [],
+      guesses: [{
+        _id:"guessabcdefghijko",
+        guess:"FOOBAR",
+        state:"correct",
+      }],
       _id: "ConnectTheCLansaa",
       tags: ["diKingdomofthePuz", "mfarConnecttheCLa", "priorityhighaaaaa"],
     },
